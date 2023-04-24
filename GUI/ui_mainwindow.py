@@ -22,6 +22,9 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpi
     QWidget)
 
 class Ui_MainWindow(object):
+    def disableStartButton(self):
+        self.pushButton_start.setEnabled(False)    
+
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
@@ -361,6 +364,8 @@ class Ui_MainWindow(object):
         self.pushButton_start = QPushButton(self.centralwidget)
         self.pushButton_start.setObjectName(u"pushButton_start")
         self.pushButton_start.setGeometry(QRect(240, 540, 111, 91))
+        self.pushButton_start.clicked.connect(MainWindow.startSimulation)
+        self.pushButton_start.clicked.connect(self.disableStartButton)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -465,4 +470,6 @@ class Ui_MainWindow(object):
         self.pushButton_save.setText(QCoreApplication.translate("MainWindow", u"save pictures", None))
         self.pushButton_start.setText(QCoreApplication.translate("MainWindow", u"START", None))
     # retranslateUi
+
+
 
