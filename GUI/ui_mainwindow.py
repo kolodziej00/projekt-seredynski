@@ -16,14 +16,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpinBox,
-    QFrame, QGraphicsView, QGroupBox, QLCDNumber,
+    QFrame, QGraphicsView, QTableWidget, QGroupBox, QLCDNumber,
     QLabel, QMainWindow, QMenuBar, QPushButton,
     QRadioButton, QSizePolicy, QSpinBox, QStatusBar,
     QWidget)
 
 class Ui_MainWindow(object):
     def disableStartButton(self):
-        self.pushButton_start.setEnabled(False)    
+        print("Disable start button!")
+        # self.pushButton_start.setEnabled(False)    
 
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -31,9 +32,13 @@ class Ui_MainWindow(object):
         MainWindow.resize(958, 686)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.graphicsView_CA = QGraphicsView(self.centralwidget)
+        self.graphicsView_CA = QTableWidget(self.centralwidget)
         self.graphicsView_CA.setObjectName(u"graphicsView_CA")
         self.graphicsView_CA.setGeometry(QRect(490, 80, 300, 300))
+        self.graphicsView_CA.verticalHeader().setVisible(False)
+        self.graphicsView_CA.horizontalHeader().setVisible(False)
+        self.graphicsView_CA.horizontalHeader().setMinimumSectionSize(1)
+        self.graphicsView_CA.verticalHeader().setMinimumSectionSize(1)
         self.pushButton_states = QPushButton(self.centralwidget)
         self.pushButton_states.setObjectName(u"pushButton_states")
         self.pushButton_states.setGeometry(QRect(380, 20, 80, 24))

@@ -5,7 +5,7 @@ Created on Sat Apr 22 10:35:46 2023
 @author: pozdro
 """
 
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import (QMainWindow, QTableWidget, QTableWidgetItem, QHeaderView)
 from PySide6.QtCore import QObject
 from GUI.ui_mainwindow import Ui_MainWindow
 
@@ -19,17 +19,36 @@ from data.seed import Seed
 from data.strategies import Strategies
 from data.synch import Synch
 
+from algorithm.Cell import Cell
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+    def createTableCA(self):
+        rows = self.data.canvas.rows
+        cols = self.data.canvas.cols
+        width = self.ui.graphicsView_CA.width() - cols
+        height = self.ui.graphicsView_CA.height() - rows
+        self.ui.graphicsView_CA.setRowCount(rows)
+        self.ui.graphicsView_CA.setColumnCount(cols)
+        for n in range(rows):
+            for m in range(cols):
+                self.ui.graphicsView_CA.setItem(n, m, QTableWidgetItem())
+ 
+        # self.ui.graphicsView_CA.horizontalHeader().setMaximumSectionSize()
+        # self.ui.graphicsView_CA.verticalHeader().setMaximumSectionSize()
+        self.ui.graphicsView_CA.horizontalHeader().setDefaultSectionSize(width // cols)
+        self.ui.graphicsView_CA.verticalHeader().setDefaultSectionSize(height // rows)
+             
+
     def setData(self):
         self.data = MyData(self.canvas, self.competition, self.debugger,
                          self.iterations, self.mutation, self.seed,
                          self.strategies, self.synch)
-        print("Wszystkie dane zapisane poprawnie.")
+        self.createTableCA()
 
     def startSimulation(self):
         self.canvas = Canvas(self.ui.spinBox_Mrows.value(), 
