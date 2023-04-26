@@ -9,14 +9,15 @@ import numpy as np
 from algorithm.Cell import Cell
 class CA:
     def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, seed = None):
+        # size of CA
         self.M_rows = M_rows
         self.N_cols = N_cols
         if seed == None:
             random.seed()
         else:
             random.seed(seed)
-        self.CA_cells = self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK)
-        
+        # numpy array of cells in automata
+        self.cells = self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK)
         
     
     def create_CA(self, p_init_C, allC, allD, kD, kC, minK, maxK):
@@ -35,6 +36,7 @@ class CA:
                 id_ += 1
         return CA_cells
     
+    # initially cell states are assigned randomly with p_init_C probability.
     def init_cell_state(self, p_init_C):
             x = random.random()
             if x <= p_init_C:
@@ -42,7 +44,8 @@ class CA:
             else:
                 state = 0
             return state
-                    
+   
+    # initially cell strategies are assigned randomly with user-defined probabilities                 
     def init_cell_strategy(self, allC, allD, kD, kC, minK, maxK):
         b1 = allC
         b2 = allD + b1

@@ -22,6 +22,7 @@ from data.strategies import Strategies
 from data.synch import Synch
 
 from algorithm.Cell import Cell
+from algorithm.CA import CA
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -56,9 +57,12 @@ class MainWindow(QMainWindow):
         cols = self.data.canvas.cols
         self.ui.graphicsView_CA.setRowCount(rows)
         self.ui.graphicsView_CA.setColumnCount(cols)
+        automata =  CA(rows, cols, self.data.canvas.p_init_C, self.data.strategies.all_C,
+                       self.data.strategies.all_D, self.data.strategies.k_D, self.data.strategies.k_C,
+                       self.data.strategies.k_var_min, self.data.strategies.k_var_max, self.seed.customSeed)
         for n in range(rows):
             for m in range(cols):
-                self.ui.graphicsView_CA.setItem(n, m, Cell())
+                self.ui.graphicsView_CA.setItem(n, m, automata.cells[n, m])
                 # self.ui.graphicsView_CA.item(n,m).setBackground(QColor(255,100,0,255))
         cellWidth = self.roundDivision(300, cols)
         cellHeight = self.roundDivision(300, rows)
