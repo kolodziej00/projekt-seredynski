@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpi
     QFrame, QGraphicsView, QTableWidget, QGroupBox, QLCDNumber,
     QLabel, QMainWindow, QMenuBar, QPushButton,
     QRadioButton, QSizePolicy, QSpinBox, QStatusBar,
-    QWidget)
+    QWidget, QAbstractItemView)
 
 class Ui_MainWindow(object):
     def disableStartButton(self):
@@ -39,6 +39,7 @@ class Ui_MainWindow(object):
         self.graphicsView_CA.horizontalHeader().setVisible(False)
         self.graphicsView_CA.horizontalHeader().setMinimumSectionSize(1)
         self.graphicsView_CA.verticalHeader().setMinimumSectionSize(1)
+        self.graphicsView_CA.setSelectionMode(QAbstractItemView.SingleSelection)
         self.pushButton_states = QPushButton(self.centralwidget)
         self.pushButton_states.setObjectName(u"pushButton_states")
         self.pushButton_states.setGeometry(QRect(380, 20, 80, 24))
@@ -358,6 +359,7 @@ class Ui_MainWindow(object):
         self.pushButton_save = QPushButton(self.centralwidget)
         self.pushButton_save.setObjectName(u"pushButton_save")
         self.pushButton_save.setGeometry(QRect(720, 400, 81, 21))
+        self.pushButton_save.clicked.connect(MainWindow.saveImage)
         self.graphicsView_gnuplot = QGraphicsView(self.centralwidget)
         self.graphicsView_gnuplot.setObjectName(u"graphicsView_gnuplot")
         self.graphicsView_gnuplot.setGeometry(QRect(380, 440, 571, 192))

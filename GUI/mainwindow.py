@@ -7,6 +7,7 @@ Created on Sat Apr 22 10:35:46 2023
 import math
 
 from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem)
+from PySide6.QtGui import (QColor, QPixmap)
 from PySide6.QtCore import QRect
 from GUI.ui_mainwindow import Ui_MainWindow
 
@@ -28,6 +29,18 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+    def saveImage(self):
+        pixmap = QPixmap(self.ui.graphicsView_CA.size())
+        self.ui.graphicsView_CA.render(pixmap)
+        pixmap.save("Images//test.png", "PNG", -1)
+
+    def changeCellsColor(self, selected):
+        for ix in selected.indexes():
+            if self.ui.graphicsView_CA.item(ix.row(), ix.column()).background().color() == QColor(255,100,0,255):
+                self.ui.graphicsView_CA.item(ix.row(), ix.column()).setBackground(QColor(0,0,0,0))
+            else:
+                self.ui.graphicsView_CA.item(ix.row(), ix.column()).setBackground(QColor(255,100,0,255))
+
     def roundDivision(self, size, n):
         floor = math.floor(size / n)
         roof = math.ceil(size / n)
@@ -45,15 +58,16 @@ class MainWindow(QMainWindow):
         self.ui.graphicsView_CA.setColumnCount(cols)
         for n in range(rows):
             for m in range(cols):
-                # Tutaj później zamienić QTableWidgetItem na Cell
-                self.ui.graphicsView_CA.setItem(n, m, QTableWidgetItem())
-        cellWidth = self.roundDivision(self.ui.graphicsView_CA.width(), cols)
-        cellHeight = self.roundDivision(self.ui.graphicsView_CA.height(), rows)
+                self.ui.graphicsView_CA.setItem(n, m, Cell())
+                # self.ui.graphicsView_CA.item(n,m).setBackground(QColor(255,100,0,255))
+        cellWidth = self.roundDivision(300, cols)
+        cellHeight = self.roundDivision(300, rows)
         width = cellWidth * cols + 2
         height = cellHeight * rows + 2
         self.ui.graphicsView_CA.setGeometry(QRect(490, 80, width, height))
         self.ui.graphicsView_CA.horizontalHeader().setDefaultSectionSize(cellWidth)
         self.ui.graphicsView_CA.verticalHeader().setDefaultSectionSize(cellHeight)
+        self.ui.graphicsView_CA.selectionModel().selectionChanged.connect(self.changeCellsColor)
              
 
     def setData(self):
