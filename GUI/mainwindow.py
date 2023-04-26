@@ -4,9 +4,10 @@ Created on Sat Apr 22 10:35:46 2023
 
 @author: pozdro
 """
+import math
 
-from PySide6.QtWidgets import (QMainWindow, QTableWidget, QTableWidgetItem, QHeaderView)
-from PySide6.QtCore import QObject
+from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem)
+from PySide6.QtCore import QRect
 from GUI.ui_mainwindow import Ui_MainWindow
 
 from data.canvas import Canvas
@@ -27,21 +28,32 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+    def roundDivision(self, size, n):
+        floor = math.floor(size / n)
+        roof = math.ceil(size / n)
+        floorDif = abs(size - floor * n)
+        roofDif = abs(size - roof * n)
+        if floorDif < roofDif:
+            return floor
+        else:
+            return roof
+
     def createTableCA(self):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
-        width = self.ui.graphicsView_CA.width() - cols
-        height = self.ui.graphicsView_CA.height() - rows
         self.ui.graphicsView_CA.setRowCount(rows)
         self.ui.graphicsView_CA.setColumnCount(cols)
         for n in range(rows):
             for m in range(cols):
+                # Tutaj później zamienić QTableWidgetItem na Cell
                 self.ui.graphicsView_CA.setItem(n, m, QTableWidgetItem())
- 
-        # self.ui.graphicsView_CA.horizontalHeader().setMaximumSectionSize()
-        # self.ui.graphicsView_CA.verticalHeader().setMaximumSectionSize()
-        self.ui.graphicsView_CA.horizontalHeader().setDefaultSectionSize(width // cols)
-        self.ui.graphicsView_CA.verticalHeader().setDefaultSectionSize(height // rows)
+        cellWidth = self.roundDivision(self.ui.graphicsView_CA.width(), cols)
+        cellHeight = self.roundDivision(self.ui.graphicsView_CA.height(), rows)
+        width = cellWidth * cols + 2
+        height = cellHeight * rows + 2
+        self.ui.graphicsView_CA.setGeometry(QRect(490, 80, width, height))
+        self.ui.graphicsView_CA.horizontalHeader().setDefaultSectionSize(cellWidth)
+        self.ui.graphicsView_CA.verticalHeader().setDefaultSectionSize(cellHeight)
              
 
     def setData(self):
