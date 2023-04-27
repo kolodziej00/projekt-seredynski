@@ -33,7 +33,8 @@ class MainWindow(QMainWindow):
     def saveImage(self):
         pixmap = QPixmap(self.ui.graphicsView_CA.size())
         self.ui.graphicsView_CA.render(pixmap)
-        pixmap.save("Images//test.png", "PNG", -1)
+        fileName = "Images//image" + str(self.ui.lcdNumber_iters.value()) + ".png"
+        pixmap.save(fileName, "PNG", -1)
 
     def changeCellsColor(self, selected, R, G, B):
         for ix in selected:
