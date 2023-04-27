@@ -19,9 +19,10 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpi
     QFrame, QGraphicsView, QTableWidget, QGroupBox, QLCDNumber,
     QLabel, QMainWindow, QMenuBar, QPushButton,
     QRadioButton, QSizePolicy, QSpinBox, QStatusBar,
-    QWidget, QAbstractItemView)
+    QWidget, QAbstractItemView, QMessageBox)
 
 class Ui_MainWindow(object):
+
     def disableStartButton(self):
         print("Disable start button!")
         # self.pushButton_start.setEnabled(False)    
