@@ -6,7 +6,7 @@ Created on Sat Apr 22 10:35:46 2023
 """
 import math
 
-from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem)
+from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem, QMessageBox)
 from PySide6.QtGui import (QColor, QPixmap)
 from PySide6.QtCore import QRect
 from GUI.ui_mainwindow import Ui_MainWindow
@@ -21,7 +21,6 @@ from data.seed import Seed
 from data.strategies import Strategies
 from data.synch import Synch
 
-from algorithm.Cell import Cell
 from algorithm.CA import CA
 
 class MainWindow(QMainWindow):
@@ -29,6 +28,13 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+    def displayDataWarning(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText("Can't process data.\nThe data entered is incorrect.")
+        msg.setWindowTitle("Invalid input")
+        msg.exec_()
 
     def saveImage(self):
         pixmap = QPixmap(self.ui.graphicsView_CA.size())
@@ -72,7 +78,6 @@ class MainWindow(QMainWindow):
         self.ui.graphicsView_CA.setGeometry(QRect(490, 80, width, height))
         self.ui.graphicsView_CA.horizontalHeader().setDefaultSectionSize(cellWidth)
         self.ui.graphicsView_CA.verticalHeader().setDefaultSectionSize(cellHeight)
-        # self.ui.graphicsView_CA.selectionModel().selectionChanged.connect(self.changeCellsColor)
              
 
     def setData(self):
@@ -82,6 +87,17 @@ class MainWindow(QMainWindow):
         self.createTableCA()
 
     def startSimulation(self):
+        #Tutaj należy sprawdzić wszystkie wprowadzone dane zanim zostaną one przekazane dalej
+        allC = self.ui.doubleSpinBox_allC.value()
+        allD = self.ui.doubleSpinBox_allD.value()
+        kD = self.ui.doubleSpinBox_kD.value()
+        kC = self.ui.doubleSpinBox_kC.value()
+        kDC = self.ui.doubleSpinBox_kDC.value()
+        strategySum = allC + allD + kD + kC + kDC
+        if strategySum != 1:
+            self.displayDataWarning()
+            return
+
         self.canvas = Canvas(self.ui.spinBox_Mrows.value(), 
                                 self.ui.spinBox_Ncols.value(), 
                                 self.ui.doubleSpinBox_p_init_C.value(),
