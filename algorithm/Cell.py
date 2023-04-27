@@ -10,7 +10,8 @@ import numpy as np
 
 class Cell(QTableWidgetItem):
     def __init__(self, _id, x, y, strategy = -1, k = -1, action = -1, state = -1):
-        
+        super().__init__()
+        super().__init_subclass__()
         
         # strategy of Cell - decides cell's state in next step of Cellular automata
         # 0 - all D - always defect (state = 0)

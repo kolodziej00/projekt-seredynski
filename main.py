@@ -14,10 +14,10 @@ def main():
     # for i in range(0, 10):
     #     for j in range(0,10):
     #         print(str(z) + ":")
-    #         print("Cell state: " + str( ca.CA_cells[i,j].state) )
-    #         print("Cell strategy: " + str( ca.CA_cells[i,j].strategy))
-    #         print("Cell k: " + str( ca.CA_cells[i,j].k) + "\n")
+    #         print("Cell state: " + str( ca.cells[i,j].state) )
+    #         print("Cell strategy: " + str( ca.cells[i,j].strategy))
     #         z = z + 1
+    #         print("Cell k: " + str( ca.cells[i,j].k) + "\n")
 
     app = QApplication(sys.argv)
     window = MainWindow()

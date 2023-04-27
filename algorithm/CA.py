@@ -16,15 +16,16 @@ class CA:
             random.seed()
         else:
             random.seed(seed)
+            
         # numpy array of cells in automata
         self.cells = self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK)
         
-    
+        
     def create_CA(self, p_init_C, allC, allD, kD, kC, minK, maxK):
         CA_cells = np.empty((self.M_rows, self.N_cols), dtype=object)
         id_ = 0
-        for i in range(0, self.M_rows):
-            for j in range(0, self.N_cols):
+        for i in range(self.M_rows):
+            for j in range(self.N_cols):
                 # Cells on borders have predefined static properties.
                 if i == 0 or i == self.M_rows - 1 or j == 0 or j == self.N_cols - 1:
                     CA_cells[i,j] = Cell(_id = id_, x =j , y = i, state = 0, action = 1, strategy = 0)

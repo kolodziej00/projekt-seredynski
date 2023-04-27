@@ -38,26 +38,47 @@ class Ui_MainWindow(object):
         self.graphicsView_CA.verticalHeader().setVisible(False)
         self.graphicsView_CA.horizontalHeader().setVisible(False)
         self.graphicsView_CA.horizontalHeader().setMinimumSectionSize(1)
-        self.graphicsView_CA.verticalHeader().setMinimumSectionSize(1)
         self.graphicsView_CA.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.graphicsView_CA.verticalHeader().setMinimumSectionSize(1)
+        self.graphicsView_CA.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # self.graphicsView_CA.setDisabled(1)
+        
         self.pushButton_states = QPushButton(self.centralwidget)
         self.pushButton_states.setObjectName(u"pushButton_states")
         self.pushButton_states.setGeometry(QRect(380, 20, 80, 24))
+        self.pushButton_states.clicked.connect(MainWindow.state_color_handler)
+        
         self.pushButton_strategies = QPushButton(self.centralwidget)
         self.pushButton_strategies.setObjectName(u"pushButton_strategies")
         self.pushButton_strategies.setGeometry(QRect(470, 20, 80, 24))
+        self.pushButton_strategies.clicked.connect(MainWindow.strategies_color_handler)
+        
         self.pushButton_kD = QPushButton(self.centralwidget)
         self.pushButton_kD.setObjectName(u"pushButton_kD")
         self.pushButton_kD.setGeometry(QRect(560, 20, 80, 24))
+        
         self.pushButton_kC = QPushButton(self.centralwidget)
         self.pushButton_kC.setObjectName(u"pushButton_kC")
         self.pushButton_kC.setGeometry(QRect(650, 20, 80, 24))
+        
         self.pushButton_kDC = QPushButton(self.centralwidget)
         self.pushButton_kDC.setObjectName(u"pushButton_kDC")
         self.pushButton_kDC.setGeometry(QRect(740, 20, 80, 24))
+        
         self.pushButton_actions = QPushButton(self.centralwidget)
         self.pushButton_actions.setObjectName(u"pushButton_actions")
         self.pushButton_actions.setGeometry(QRect(830, 20, 80, 24))
+        
+        # disabling buttons before simulation has started
+        self.pushButton_states.setDisabled(1)
+        self.pushButton_strategies.setDisabled(1)
+        self.pushButton_kD.setDisabled(1)
+        self.pushButton_kC.setDisabled(1)
+        self.pushButton_kDC.setDisabled(1)
+        self.pushButton_actions.setDisabled(1)
+        self.pushButton_states.setDisabled(1)
+       
+        
         self.groupBox_simul = QGroupBox(self.centralwidget)
         self.groupBox_simul.setObjectName(u"groupBox_simul")
         self.groupBox_simul.setGeometry(QRect(10, 0, 361, 511))
