@@ -10,6 +10,8 @@ from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem, QMessageBox)
 from PySide6.QtGui import (QColor, QPixmap)
 from PySide6.QtCore import QRect
 from GUI.ui_mainwindow import Ui_MainWindow
+from PySide6.QtGui import (QPen)
+
 
 from data.canvas import Canvas
 from data.competition import Competition
@@ -142,6 +144,8 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_kDC.setDisabled(0)
         self.ui.pushButton_actions.setDisabled(0)
         self.ui.pushButton_states.setDisabled(0)
+
+        self.save_results()
         
     
     def state_color_handler(self):
@@ -187,6 +191,7 @@ class MainWindow(QMainWindow):
         self.changeCellsColor(selected_kD, 0,128,0) # green
         self.changeCellsColor(selected_kC, 0,255,255) # cyan
         self.changeCellsColor(selected_kDC, 255,20,147) # pink
+
     def kD_strategies_color_handler(self):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
@@ -286,7 +291,7 @@ class MainWindow(QMainWindow):
 
         for i in range(rows):
             for j in range(cols):
-                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0,0,0, 200))
+                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 200))
                 if self.automata.cells[i,j].strategy == 4:
                     if self.automata.cells[i,j].k == 0:
                         selected_k_0.append((i,j))
@@ -314,3 +319,30 @@ class MainWindow(QMainWindow):
         self.changeCellsColor(selected_k_6, 255, 20, 147, 218)
         self.changeCellsColor(selected_k_7, 255, 20, 147, 255)
 
+    def save_results(self):
+
+        f = open("result.txt", "w")
+        f.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
+        f.write("\n#num_of_exper: 1" + str(self.data.iterations.num_of_exper))
+        f.write("\n#rows: " + str(self.data.canvas.rows))
+        f.write("\n#cols: " + str(self.data.canvas.cols))
+        f.write("\n#p_init_C: " + str(self.data.canvas.p_init_C))
+        f.write("\n#p_state_mut: " + str(self.data.mutations.p_state_mut))
+        f.write("\n#p_strat_mut: " + str(self.data.mutations.p_strat_mut))
+        f.write("\n#p_0_neighb: " + str(self.data.mutations.p_0_neighb_mut))
+        f.write("\n#p_1_neighb: " + str(self.data.mutations.p_1_neighb_mut))
+        if(self.data.competition.isRoulette):
+            f.write("\n#comp_type: roulette")
+        elif(self.data.competition.isTournament):
+            f.write("\n#comp_type: tournament")
+        elif():
+            f.write("\n#comp_type: None?")
+
+        f.write("\n#sharing: " + str(self.data.canvas.isSharing))
+        f.write("\n#allC: " + str(self.data.strategies.all_C))
+        f.write("\n#allD: " + str(self.data.strategies.all_D))
+        f.write("\n#kD: " + str(self.data.strategies.k_D))
+        f.write("\n#kC: " + str(self.data.strategies.k_C))
+        f.write("\n#kDC: " + str(self.data.strategies.k_DC))
+        f.write("\n#k_values: " + str(self.data.strategies.k_var_min) + " to " + str(self.data.strategies.k_var_max))
+        f.write("\n#synchronity_prob: " + str(self.data.synch.synch_prob))

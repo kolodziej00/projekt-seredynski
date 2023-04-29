@@ -1,0 +1,18 @@
+#num_of_iter: 100
+#num_of_exper: 11
+#rows: 51
+#cols: 51
+#p_init_C: 0.5
+#p_state_mut: 0.0
+#p_strat_mut: 0.0
+#p_0_neighb: 0.3
+#p_1_neighb: 0.1
+#comp_type: tournament
+#sharing: False
+#allC: 0.2
+#allD: 0.2
+#kD: 0.2
+#kC: 0.2
+#kDC: 0.2
+#k_values: 0 to 8
+#synchronity_prob: 1.0

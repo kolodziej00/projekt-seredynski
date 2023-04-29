@@ -14,6 +14,7 @@ class CA:
         self.N_cols = N_cols
         if seed == None:
             random.seed()
+
         else:
             random.seed(seed)
             
@@ -72,4 +73,8 @@ class CA:
             y = random.randint(minK, maxK)
             k = y
         return strategy, k
-                
+
+
+    def calculate_statistics(self):
+        f = open("result.txt", "w")
+        f.write()
