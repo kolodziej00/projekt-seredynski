@@ -22,6 +22,7 @@ from data.myData import MyData
 from data.seed import Seed
 from data.strategies import Strategies
 from data.synch import Synch
+from data.payoff import Payoff
 
 from algorithm.CA import CA
 
@@ -85,7 +86,7 @@ class MainWindow(QMainWindow):
     def setData(self):
         self.data = MyData(self.canvas, self.competition, self.debugger,
                          self.iterations, self.mutation, self.seed,
-                         self.strategies, self.synch)
+                         self.strategies, self.synch, self.payoff)
         self.createTableCA()
 
     def startSimulation(self):
@@ -134,7 +135,12 @@ class MainWindow(QMainWindow):
                                         self.ui.doubleSpinBox_kDC.value(), 
                                         self.ui.spinBox_kMin.value(),
                                         self.ui.spinBox_kMax.value())
-        
+
+        self.payoff = Payoff(self.ui.doubleSpinBox_a.value(),
+                             self.ui.doubleSpinBox_b.value(),
+                             self.ui.doubleSpinBox_c.value(),
+                             self.ui.doubleSpinBox_d.value())
+
         self.setData()
         
         self.ui.pushButton_states.setDisabled(0)
@@ -154,9 +160,9 @@ class MainWindow(QMainWindow):
         selected = []
         for i in range(rows):
             for j in range(cols):
-                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255,255,255, 255))
-                if self.automata.cells[i,j].state==1:
-                    selected.append((i,j))
+                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255, 255, 255, 255))
+                if self.automata.cells[i, j].state == 1:
+                    selected.append((i, j))
         self.changeCellsColor(selected, 255, 100, 0)      
         
     def strategies_color_handler(self):
@@ -169,28 +175,28 @@ class MainWindow(QMainWindow):
         selected_kDC = []
         for i in range(rows):
             for j in range(cols):
-                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255,255,255, 255))
+                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255, 255, 255, 255))
                 # all D
-                if self.automata.cells[i,j].strategy==0:
-                    selected_all_D.append((i,j))
+                if self.automata.cells[i, j].strategy==0:
+                    selected_all_D.append((i, j))
                 # all C
-                elif self.automata.cells[i,j].strategy==1:
-                    selected_all_C.append((i,j))
+                elif self.automata.cells[i, j].strategy==1:
+                    selected_all_C.append((i, j))
                 # kD
-                elif self.automata.cells[i,j].strategy==2:
-                    selected_kD.append((i,j))
+                elif self.automata.cells[i, j].strategy==2:
+                    selected_kD.append((i, j))
                 # kC
-                elif self.automata.cells[i,j].strategy==3:
-                    selected_kC.append((i,j))
+                elif self.automata.cells[i, j].strategy==3:
+                    selected_kC.append((i, j))
                 # kDC
-                elif self.automata.cells[i,j].strategy==4:
-                    selected_kDC.append((i,j))
+                elif self.automata.cells[i, j].strategy==4:
+                    selected_kDC.append((i, j))
         
         self.changeCellsColor(selected_all_C, 255, 100, 0) # red
-        self.changeCellsColor(selected_all_D, 0,0,255) # blue
-        self.changeCellsColor(selected_kD, 0,128,0) # green
-        self.changeCellsColor(selected_kC, 0,255,255) # cyan
-        self.changeCellsColor(selected_kDC, 255,20,147) # pink
+        self.changeCellsColor(selected_all_D, 0, 0, 255) # blue
+        self.changeCellsColor(selected_kD, 0, 128, 0) # green
+        self.changeCellsColor(selected_kC, 0, 255, 255) # cyan
+        self.changeCellsColor(selected_kDC, 255, 20, 147) # pink
 
     def kD_strategies_color_handler(self):
         rows = self.data.canvas.rows
@@ -203,37 +209,40 @@ class MainWindow(QMainWindow):
         selected_k_5 = []
         selected_k_6 = []
         selected_k_7 = []
+        selected_k_8 = []
 
         for i in range(rows):
             for j in range(cols):
-                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0,0,0, 255))
-                if self.automata.cells[i,j].strategy == 2:
-                    if self.automata.cells[i,j].k == 0:
-                        selected_k_0.append((i,j))
-                    elif self.automata.cells[i,j].k == 1:
-                        selected_k_1.append((i,j))
-                    elif self.automata.cells[i,j].k == 2:
-                        selected_k_2.append((i,j))
-                    elif self.automata.cells[i,j].k == 3:
-                        selected_k_3.append((i,j))
-                    elif self.automata.cells[i,j].k == 4:
-                        selected_k_4.append((i,j))
-                    elif self.automata.cells[i,j].k == 5:
-                        selected_k_5.append((i,j))
-                    elif self.automata.cells[i,j].k == 6:
-                        selected_k_6.append((i,j))
-                    elif self.automata.cells[i,j].k == 7:
-                        selected_k_7.append((i,j))
+                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 255))
+                if self.automata.cells[i, j].strategy == 2:
+                    if self.automata.cells[i, j].k == 0:
+                        selected_k_0.append((i, j))
+                    elif self.automata.cells[i, j].k == 1:
+                        selected_k_1.append((i, j))
+                    elif self.automata.cells[i, j].k == 2:
+                        selected_k_2.append((i, j))
+                    elif self.automata.cells[i, j].k == 3:
+                        selected_k_3.append((i, j))
+                    elif self.automata.cells[i, j].k == 4:
+                        selected_k_4.append((i, j))
+                    elif self.automata.cells[i, j].k == 5:
+                        selected_k_5.append((i, j))
+                    elif self.automata.cells[i, j].k == 6:
+                        selected_k_6.append((i, j))
+                    elif self.automata.cells[i, j].k == 7:
+                        selected_k_7.append((i, j))
+                    elif self.automata.cells[i, j].k == 8:
+                        selected_k_8.append((i, j))
 
-
-        self.changeCellsColor(selected_k_0, 0, 128, 0, 31)
-        self.changeCellsColor(selected_k_1, 0, 128, 0, 62)
-        self.changeCellsColor(selected_k_2, 0, 128, 0, 93)
-        self.changeCellsColor(selected_k_3, 0, 128, 0, 124)
-        self.changeCellsColor(selected_k_4, 0, 128, 0, 156)
-        self.changeCellsColor(selected_k_5, 0, 128, 0, 187)
-        self.changeCellsColor(selected_k_6, 0, 128, 0, 218)
-        self.changeCellsColor(selected_k_7, 0, 128, 0, 255)
+        self.changeCellsColor(selected_k_0, 0, 128, 0, 0)
+        self.changeCellsColor(selected_k_1, 0, 128, 0, 31)
+        self.changeCellsColor(selected_k_2, 0, 128, 0, 62)
+        self.changeCellsColor(selected_k_3, 0, 128, 0, 93)
+        self.changeCellsColor(selected_k_4, 0, 128, 0, 124)
+        self.changeCellsColor(selected_k_5, 0, 128, 0, 156)
+        self.changeCellsColor(selected_k_6, 0, 128, 0, 187)
+        self.changeCellsColor(selected_k_7, 0, 128, 0, 218)
+        self.changeCellsColor(selected_k_8, 0, 128, 0, 255)
 
     def kC_strategies_color_handler(self):
         rows = self.data.canvas.rows
@@ -246,36 +255,40 @@ class MainWindow(QMainWindow):
         selected_k_5 = []
         selected_k_6 = []
         selected_k_7 = []
+        selected_k_8 = []
 
         for i in range(rows):
             for j in range(cols):
-                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0,0,0, 200))
-                if self.automata.cells[i,j].strategy == 3:
-                    if self.automata.cells[i,j].k == 0:
-                        selected_k_0.append((i,j))
-                    elif self.automata.cells[i,j].k == 1:
-                        selected_k_1.append((i,j))
-                    elif self.automata.cells[i,j].k == 2:
-                        selected_k_2.append((i,j))
-                    elif self.automata.cells[i,j].k == 3:
-                        selected_k_3.append((i,j))
-                    elif self.automata.cells[i,j].k == 4:
-                        selected_k_4.append((i,j))
-                    elif self.automata.cells[i,j].k == 5:
-                        selected_k_5.append((i,j))
-                    elif self.automata.cells[i,j].k == 6:
-                        selected_k_6.append((i,j))
-                    elif self.automata.cells[i,j].k == 7:
-                        selected_k_7.append((i,j))
+                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 200))
+                if self.automata.cells[i, j].strategy == 3:
+                    if self.automata.cells[i, j].k == 0:
+                        selected_k_0.append((i, j))
+                    elif self.automata.cells[i, j].k == 1:
+                        selected_k_1.append((i, j))
+                    elif self.automata.cells[i, j].k == 2:
+                        selected_k_2.append((i, j))
+                    elif self.automata.cells[i, j].k == 3:
+                        selected_k_3.append((i, j))
+                    elif self.automata.cells[i, j].k == 4:
+                        selected_k_4.append((i, j))
+                    elif self.automata.cells[i, j].k == 5:
+                        selected_k_5.append((i, j))
+                    elif self.automata.cells[i, j].k == 6:
+                        selected_k_6.append((i, j))
+                    elif self.automata.cells[i, j].k == 7:
+                        selected_k_7.append((i, j))
+                    elif self.automata.cells[i, j].k == 8:
+                        selected_k_8.append((i, j))
 
-        self.changeCellsColor(selected_k_0, 0, 255, 255, 31)
-        self.changeCellsColor(selected_k_1, 0, 255, 255, 62)
-        self.changeCellsColor(selected_k_2, 0, 255, 255, 93)
-        self.changeCellsColor(selected_k_3, 0, 255, 255, 124)
-        self.changeCellsColor(selected_k_4, 0, 255, 255, 156)
-        self.changeCellsColor(selected_k_5, 0, 255, 255, 187)
-        self.changeCellsColor(selected_k_6, 0, 255, 255, 218)
-        self.changeCellsColor(selected_k_7, 0, 255, 255, 255)
+        self.changeCellsColor(selected_k_0, 0, 255, 255, 0)
+        self.changeCellsColor(selected_k_1, 0, 255, 255, 31)
+        self.changeCellsColor(selected_k_2, 0, 255, 255, 62)
+        self.changeCellsColor(selected_k_3, 0, 255, 255, 93)
+        self.changeCellsColor(selected_k_4, 0, 255, 255, 124)
+        self.changeCellsColor(selected_k_5, 0, 255, 255, 156)
+        self.changeCellsColor(selected_k_6, 0, 255, 255, 187)
+        self.changeCellsColor(selected_k_7, 0, 255, 255, 218)
+        self.changeCellsColor(selected_k_8, 0, 255, 255, 255)
 
     def kDC_strategies_color_handler(self):
         rows = self.data.canvas.rows
@@ -288,6 +301,7 @@ class MainWindow(QMainWindow):
         selected_k_5 = []
         selected_k_6 = []
         selected_k_7 = []
+        selected_k_8 = []
 
         for i in range(rows):
             for j in range(cols):
@@ -309,18 +323,20 @@ class MainWindow(QMainWindow):
                         selected_k_6.append((i,j))
                     elif self.automata.cells[i,j].k == 7:
                         selected_k_7.append((i,j))
+                    elif self.automata.cells[i, j].k == 8:
+                        selected_k_8.append((i, j))
 
-        self.changeCellsColor(selected_k_0, 255, 20, 147, 31)
-        self.changeCellsColor(selected_k_1, 255, 20, 147, 62)
-        self.changeCellsColor(selected_k_2, 255, 20, 147, 93)
-        self.changeCellsColor(selected_k_3, 255, 20, 147, 124)
-        self.changeCellsColor(selected_k_4, 255, 20, 147, 156)
-        self.changeCellsColor(selected_k_5, 255, 20, 147, 187)
-        self.changeCellsColor(selected_k_6, 255, 20, 147, 218)
-        self.changeCellsColor(selected_k_7, 255, 20, 147, 255)
+        self.changeCellsColor(selected_k_0, 255, 20, 147, 0)
+        self.changeCellsColor(selected_k_1, 255, 20, 147, 31)
+        self.changeCellsColor(selected_k_2, 255, 20, 147, 62)
+        self.changeCellsColor(selected_k_3, 255, 20, 147, 93)
+        self.changeCellsColor(selected_k_4, 255, 20, 147, 124)
+        self.changeCellsColor(selected_k_5, 255, 20, 147, 156)
+        self.changeCellsColor(selected_k_6, 255, 20, 147, 187)
+        self.changeCellsColor(selected_k_7, 255, 20, 147, 218)
+        self.changeCellsColor(selected_k_8, 255, 20, 147, 255)
 
     def save_results(self):
-
         f = open("result.txt", "w")
         f.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
         f.write("\n#num_of_exper: 1" + str(self.data.iterations.num_of_exper))
@@ -346,3 +362,22 @@ class MainWindow(QMainWindow):
         f.write("\n#kDC: " + str(self.data.strategies.k_DC))
         f.write("\n#k_values: " + str(self.data.strategies.k_var_min) + " to " + str(self.data.strategies.k_var_max))
         f.write("\n#synchronity_prob: " + str(self.data.synch.synch_prob))
+        f.write("\n#optimal_num_of_1s: " + str(self.data.synch.optimal_num_1s))
+        f.write("\n#playerC_opponentD_payoff: " + str(self.data.payoff.c))
+        f.write("\n#playerC_opponentC_payoff: " + str(self.data.payoff.d))
+        f.write("\n#playerD_opponentD_payoff: " + str(self.data.payoff.a))
+        f.write("\n#playerD_opponentC_payoff: " + str(self.data.payoff.b))
+        f.write("\n#debug:  " + str(self.data.debugger.isDebug))
+
+        for i in range(self.data.iterations.num_of_exper):
+            if i != 0:
+                self.createTableCA()
+            f.write("\n\n\n#Experiment: " + str(i))
+
+            f.write("\n\n\n#iter         f_C          f_C_corr        av_sum      f_allC      f_allD")
+            f.write("        f_kD        f_kC        f_kDC       f_strat_ch      f_0D        f_1D")
+            f.write("        f_2D        f_3D        f_4D        f_5D        f_6D        f_7D        f_8D")
+            f.write("        f_0C        f_1C        f_2C        f_3C        f_4C        f_5C        f_6C")
+            f.write("        f_7C        f_8C        f_0DC       f_1DC       f_2DC       f_3DC       f_4DC")
+            f.write("        f_5DC       f_6DC       f_7DC       f_8DC\n")
+            self.automata.statistics.write_stats_to_file(f)
