@@ -72,7 +72,8 @@ class MainWindow(QMainWindow):
             seed = None
         self.automata = CA(rows, cols, self.data.canvas.p_init_C, self.data.strategies.all_C,
                        self.data.strategies.all_D, self.data.strategies.k_D, self.data.strategies.k_C,
-                       self.data.strategies.k_var_min, self.data.strategies.k_var_max, self.data.iterations.num_of_iter, seed)
+                       self.data.strategies.k_var_min, self.data.strategies.k_var_max, self.data.iterations.num_of_iter,
+                       self.data.payoff.d, self.data.payoff.c, self.data.payoff.b, self.data.payoff.a, seed)
 
         k, cells = self.automata.cells[0]
         for n in range(rows):

@@ -9,10 +9,10 @@ from PySide6.QtGui import (QBrush, QColor)
 import numpy as np
 
 class Cell(QTableWidgetItem):
-    def __init__(self, _id, x, y, strategy = -1, k = -1, action = -1, state = -1):
+    def __init__(self, _id, x, y, strategy = -1, k = -1, action = -1, state = -1, group_of_1s = False, group_of_0s = False):
         super().__init__()
         super().__init_subclass__()
-        
+
         # strategy of Cell - decides cell's state in next step of Cellular automata
         # 0 - all D - always defect (state = 0)
         # 1 - all C - always coperate (state = 1)
@@ -34,10 +34,12 @@ class Cell(QTableWidgetItem):
         self.id = _id
 
 
+        self.group_of_1s = group_of_1s
+        self.group_of_0s = group_of_0s
 
-        # not yet sure if necessary...
-        # self.my_neighb_states = np.empty(8, dtype=int)
-        # self.payoffs = np.empty(8, dtype=int)
+        # cell's payoff in game with each neighbour [0] - north neighbour, [1] - north-west, [2] - west, [3] - south-west,
+        # [4] - south, [5] - south-east, [6] - east, [7] - north
+        self.payoffs = np.empty(8, dtype=float)
         
     def __init_subclass__(cls) -> None:
         return super().__init_subclass__()

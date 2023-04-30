@@ -9,8 +9,14 @@ import numpy as np
 from algorithm.Cell import Cell
 from algorithm.Statistics import Statistics
 import sys
+
+
+
+
+
 class CA:
-    def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, num_of_iter, seed = None):
+    def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, num_of_iter,
+                 payoff_C_C, payoff_C_D, payoff_D_C, payoff_D_D, seed = None):
         # size of CA
         self.M_rows = M_rows
         self.N_cols = N_cols
@@ -22,12 +28,18 @@ class CA:
         else:
             random.seed(seed)
             self.seed = seed
-            
+
+        # payoff values from GUI
+        self.payoff_C_C = payoff_C_C
+        self.payoff_C_D = payoff_C_D
+        self.payoff_D_C = payoff_D_C
+        self.payoff_D_D = payoff_D_D
+
         # save cells as a list o tuples (num_of_iter, numpy array of Cell instances)
         self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
 
         self.statistics = self.calculate_statistics()
-        
+
 
     def create_CA(self, p_init_C, allC, allD, kD, kC, minK, maxK):
         CA_cells = np.empty((self.M_rows, self.N_cols), dtype=object)
@@ -44,7 +56,7 @@ class CA:
                     CA_cells[i, j] = Cell(_id = id_, x = j, y = i, strategy = strategy, k = k, state = state)
                 id_ += 1
         return CA_cells
-    
+
     # initially cell states are assigned randomly with p_init_C probability.
     def init_cell_state(self, p_init_C):
             x = random.random()
@@ -53,8 +65,8 @@ class CA:
             else:
                 state = 0
             return state
-   
-    # initially cell strategies are assigned randomly with user-defined probabilities                 
+
+    # initially cell strategies are assigned randomly with user-defined probabilities
     def init_cell_strategy(self, allC, allD, kD, kC, minK, maxK):
         b1 = allC
         b2 = allD + b1
@@ -75,30 +87,115 @@ class CA:
             strategy = 3
             y = random.randint(minK, maxK)
             k = y
-        else: 
+        else:
             strategy = 4
             y = random.randint(minK, maxK)
             k = y
         return strategy, k
 
 
-    # def evolution(self):
-    #     cells_temp = np.empty((self.M_rows, self.N_cols), dtype=object)
-    #     for k in range(0, self.num_of_iter):
-    #         iter1, cells = self.cells[k]
-    #         for i in range(1, self.M_rows - 1):
-    #             for j in range(1, self.N_cols - 1):
-    #                 cells[i, j].action = self.decide_action(i, j, cells)
-    #
+    def evolution(self):
+
+        for k in range(0, self.num_of_iter - 1):
+            cells_temp = np.empty((self.M_rows, self.N_cols), dtype=object)
+            iter1, cells = self.cells[k]
+            for i in range(1, self.M_rows - 1):
+                for j in range(1, self.N_cols - 1):
+                    cells[i, j].action = self.decide_action(cells, i, j)
+                    cells[i, j].group_of_1s  = self.is_group_of_1s(cells, i, j)
+                    if not cells[i, j].group_of_1s:
+                        cells[i, j].group_of_0s = self.is_group_of_0s(cells, i, j)
+
+            for i in range(1, self.M_rows - 1):
+                for j in range(1, self.N_cols - 1):
+                    self.calculate_payoff(cells, i , j)
+
+
+
+                cells_temp.append(cells[i, j])
+                self.cells.append((k + 1, cells_temp))
+
+
+    def calculate_payoff(self, cells, i , j):
+        # action is D
+        if cells[i, j].action == 0:
+            # if cell is in group_of_1s or group_of_0s then all cells in neighbourhood have action = D (= 0)
+            if cells[i, j].group_of_1s or cells[i, j].group_of_0s:
+                for k in range(8):
+                    cells[i, j].payoffs[k] = self.payoff_D_D
+
+            # for loop over cell's neighbours
+            for k in range(i - 1,  i + 2):
+                for n in range(j - 1, j + 2):
+                    if k == i == j == n:
+                        continue
+                    if cells[k, n].action == 1:
+                        cells[i, j].payoffs.append(self.payoff_D_C)
+                    elif cells[k, n].action == 0:
+                        cells[i, j].payoff.append(self.payoff_D_D)
+        elif cells[i, j].action == 1:
+            # if cell's action is C then cell can't be in group_of_1s or group_of_0s
+            for k in range(i - 1,  i + 2):
+                for n in range(j - 1, j + 2):
+                    if k == i == j == n:
+                        continue
+                    if cells[k, n].action == 1:
+                        cells[i, j].payoffs.append(self.payoff_C_C)
+                    elif cells[k, n].action == 0:
+                        cells[i, j].payoff.append(self.payoff_C_D)
 
 
 
 
+    def is_group_of_0s(self, cells, i, j):
+        if cells[i, j].state == 0:
+            if cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
+                if cells[i, j - 1].state == 0 and cells[i, j + 1].state == 0:
+                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
+                        return True
+        return False
+    def is_group_of_1s(self, cells, i, j):
+        if cells[i, j].state == 1:
+            if cells[i - 1, j - 1].state == 1 and cells[i - 1, j].state == 1 and cells[i - 1, j + 1].state == 1:
+                if cells[i, j - 1].state == 1 and cells[i, j + 1].state == 1:
+                    if cells[i + 1, j - 1].state == 1 and cells[i + 1, j].state == 1 and cells[i + 1, j + 1].state == 1:
+                        return True
+        return False
 
+    def decide_action(self, cells, i, j):
+        if self.is_C_correct(cells, i, j):
+            return 1
+        elif self.is_D_correct(cells, i, j):
+            return 1
+        else:
+            return 0
 
+    def is_C_correct(self, cells, i, j):
+        if cells[i, j].state == 1:
+            if cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
+                if cells[i, j - 1].state == 0 and cells[i, j + 1].state == 0:
+                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
+                        return True
+        return False
 
-    def decide_action(self, i, j, cells):
-        return self.is_C_correct(cells, i, j) or self.is_D_correct(cells, i, j)
+    def is_D_correct(self, cells, i, j):
+        if cells[i, j].state == 0:
+            # neighbours with 1s in corners
+            if cells[i - 1, j - 1].state == 1 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 1:
+                if cells[i, j - 1].state == 0 and cells[i, j + 1].state == 0:
+                    if cells[i + 1, j - 1].state == 1 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 1:
+                        return True
+            # neighbours with 1s up and down
+            elif cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 1 and cells[i - 1, j + 1].state == 0:
+                if cells[i, j - 1].state == 0 and cells[i, j + 1].state == 0:
+                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 1 and cells[i + 1, j + 1].state == 0:
+                        return True
+            # neighbours with 1s left and right
+            elif cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
+                if cells[i, j - 1].state == 1 and cells[i, j + 1].state == 1:
+                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
+                        return True
+        return False
 
     def calculate_statistics(self):
 
@@ -244,28 +341,3 @@ class CA:
                      f_0DC, f_1DC, f_2DC, f_3DC, f_4DC, f_5DC, f_6DC, f_7DC, f_8DC)))
         return statistics
 
-    def is_C_correct(self, cells, i, j):
-        if cells[i, j].state == 1:
-            if cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
-                if cells[i, j - 1].state == 0 and cells[i, j + 1].state == 0:
-                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
-                        return True
-        return False
-    def is_D_correct(self, cells, i, j):
-        if cells[i, j].state == 0:
-            # neighbours with 1s in corners
-            if cells[i - 1, j - 1].state == 1 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 1:
-                if cells[i, j - 1]. state == 0 and cells[i, j + 1].state == 0:
-                    if cells[i + 1, j - 1].state == 1 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 1:
-                        return True
-            # neighbours with 1s up and down
-            elif cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 1 and cells[i - 1, j + 1].state == 0:
-                if cells[i, j - 1]. state == 0 and cells[i, j + 1].state == 0:
-                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 1 and cells[i + 1, j + 1].state == 0:
-                        return True
-            # neighbours with 1s left and right
-            elif cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
-                if cells[i, j - 1]. state == 1 and cells[i, j + 1].state == 1:
-                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
-                        return True
-        return False
