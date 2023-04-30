@@ -32,7 +32,9 @@ class Cell(QTableWidgetItem):
         self.y = y
         # global ID 
         self.id = _id
-        
+
+
+
         # not yet sure if necessary...
         # self.my_neighb_states = np.empty(8, dtype=int)
         # self.payoffs = np.empty(8, dtype=int)
