@@ -83,19 +83,22 @@ class CA:
 
 
     # def evolution(self):
-    #     for i in range(0, self.num_of_iter):
-    #         for j in  range(1, self.M_rows - 1):
-    #             for k in range(1, self.N_cols - 1):
-    #                 self.cells[i, j, k].action =
+    #     cells_temp = np.empty((self.M_rows, self.N_cols), dtype=object)
+    #     for k in range(0, self.num_of_iter):
+    #         iter1, cells = self.cells[k]
+    #         for i in range(1, self.M_rows - 1):
+    #             for j in range(1, self.N_cols - 1):
+    #                 cells[i, j].action = self.decide_action(i, j, cells)
     #
-    #
-    #
-    #
-    #
-    #
-    #
-    # def decide_action(self, i, j, k):
-    #     if
+
+
+
+
+
+
+
+    def decide_action(self, i, j, cells):
+        return self.is_C_correct(cells, i, j) or self.is_D_correct(cells, i, j)
 
     def calculate_statistics(self):
 
@@ -244,7 +247,25 @@ class CA:
     def is_C_correct(self, cells, i, j):
         if cells[i, j].state == 1:
             if cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
-                if cells[i, j - 1].state == 0 and cells[i, j + 1].state == 0 and cells[i + 1, j - 1].state == 0:
-                    if cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
+                if cells[i, j - 1].state == 0 and cells[i, j + 1].state == 0:
+                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
+                        return True
+        return False
+    def is_D_correct(self, cells, i, j):
+        if cells[i, j].state == 0:
+            # neighbours with 1s in corners
+            if cells[i - 1, j - 1].state == 1 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 1:
+                if cells[i, j - 1]. state == 0 and cells[i, j + 1].state == 0:
+                    if cells[i + 1, j - 1].state == 1 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 1:
+                        return True
+            # neighbours with 1s up and down
+            elif cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 1 and cells[i - 1, j + 1].state == 0:
+                if cells[i, j - 1]. state == 0 and cells[i, j + 1].state == 0:
+                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 1 and cells[i + 1, j + 1].state == 0:
+                        return True
+            # neighbours with 1s left and right
+            elif cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
+                if cells[i, j - 1]. state == 1 and cells[i, j + 1].state == 1:
+                    if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
                         return True
         return False
