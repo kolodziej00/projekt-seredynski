@@ -9,14 +9,15 @@ import numpy as np
 from algorithm.Cell import Cell
 from algorithm.Statistics import Statistics
 import sys
-
+import copy
 
 
 
 
 class CA:
     def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, num_of_iter,
-                 payoff_C_C, payoff_C_D, payoff_D_C, payoff_D_D, seed = None):
+                 payoff_C_C, payoff_C_D, payoff_D_C, payoff_D_D, is_sharing, synch_prob,
+                 is_tournament, seed = None):
         # size of CA
         self.M_rows = M_rows
         self.N_cols = N_cols
@@ -34,10 +35,20 @@ class CA:
         self.payoff_C_D = payoff_C_D
         self.payoff_D_C = payoff_D_C
         self.payoff_D_D = payoff_D_D
+        self.avg_payoff = []
+
+        # sharing of payoffs
+        self.is_sharing = is_sharing
+
+        # competition type, if true - tournament competition else roulette competition
+        self.is_tournament = is_tournament
+
+        # probability that cell will change strategy in each iteration
+        self.synch_prob = synch_prob
 
         # save cells as a list o tuples (num_of_iter, numpy array of Cell instances)
         self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
-
+        self.evolution()
         self.statistics = self.calculate_statistics()
 
 
@@ -97,42 +108,77 @@ class CA:
     def evolution(self):
 
         for k in range(0, self.num_of_iter - 1):
-            cells_temp = np.empty((self.M_rows, self.N_cols), dtype=object)
+            sum_payoff_temp = 0
             iter1, cells = self.cells[k]
+
+            # decide action and check if cell is in group_of_1s or group_of_0s
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     cells[i, j].action = self.decide_action(cells, i, j)
                     cells[i, j].group_of_1s  = self.is_group_of_1s(cells, i, j)
                     if not cells[i, j].group_of_1s:
                         cells[i, j].group_of_0s = self.is_group_of_0s(cells, i, j)
+                    # decide whether cell will be changing strategy in this iteration
+                    self.is_cell_changing_start(cells[i, j])
 
+
+            # calculate payoffs
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
-                    self.calculate_payoff(cells, i , j)
+                    self.calculate_payoff(cells, i, j)
+                    sum_payoff_temp += cells[i, j].sum_payoff
+            self.avg_payoff.append((k, sum_payoff_temp / cells.size))
+            cells_temp = copy.deepcopy(cells)
+
+            # competition - for now only tournament comp.
+            for i in range(1, self.M_rows - 1):
+                for j in range(1, self.N_cols - 1):
+                    if cells_temp[i, j].change_strategy:
+                        self.tournament_competition(cells, cells_temp, i, j)
 
 
 
-                cells_temp.append(cells[i, j])
-                self.cells.append((k + 1, cells_temp))
 
+
+            self.cells.append((k + 1, cells_temp))
+
+        # not ideal but works...
+        self.avg_payoff.append(self.avg_payoff[self.num_of_iter - 2])
+    def tournament_competition(self, cells, cells_temp, i, j):
+        max_payoff = (i, j, cells[i, j].sum_payoff)
+        for k in range(i - 1, i + 2):
+            for n in range(j - 1, j + 2):
+                if k == i and n == j:
+                    continue
+                if max_payoff[2] < cells[k, n].sum_payoff:
+                    max_payoff = (k, n, cells[k, n].sum_payoff)
+        k, n, payoff = max_payoff
+        if k != i or n != j:
+            cells_temp[i, j].strategy = cells[k, n].strategy
+            cells_temp[i, j].k = cells[k, n].k
 
     def calculate_payoff(self, cells, i , j):
         # action is D
+        m = 0
         if cells[i, j].action == 0:
             # if cell is in group_of_1s or group_of_0s then all cells in neighbourhood have action = D (= 0)
             if cells[i, j].group_of_1s or cells[i, j].group_of_0s:
                 for k in range(8):
                     cells[i, j].payoffs[k] = self.payoff_D_D
-
+                    cells[i, j].sum_payoff += self.payoff_D_D
             # for loop over cell's neighbours
             for k in range(i - 1,  i + 2):
                 for n in range(j - 1, j + 2):
-                    if k == i == j == n:
+                    if k == i and j == n:
                         continue
                     if cells[k, n].action == 1:
-                        cells[i, j].payoffs.append(self.payoff_D_C)
+                        cells[i, j].payoffs[m] = self.payoff_D_C
+                        cells[i, j].sum_payoff += self.payoff_D_C
                     elif cells[k, n].action == 0:
-                        cells[i, j].payoff.append(self.payoff_D_D)
+                        cells[i, j].payoffs[m] = self.payoff_D_D
+                        cells[i, j].sum_payoff += self.payoff_D_D
+
+                    m += 1
         elif cells[i, j].action == 1:
             # if cell's action is C then cell can't be in group_of_1s or group_of_0s
             for k in range(i - 1,  i + 2):
@@ -140,10 +186,12 @@ class CA:
                     if k == i == j == n:
                         continue
                     if cells[k, n].action == 1:
-                        cells[i, j].payoffs.append(self.payoff_C_C)
+                        cells[i, j].payoffs[m] = self.payoff_C_C
+                        cells[i, j].sum_payoff += self.payoff_C_C
                     elif cells[k, n].action == 0:
-                        cells[i, j].payoff.append(self.payoff_C_D)
-
+                        cells[i, j].payoffs[m] = self.payoff_C_D
+                        cells[i, j].sum_payoff += self.payoff_C_D
+        cells[i, j].avg_payoff = cells[i, j].sum_payoff / 8
 
 
 
@@ -154,6 +202,7 @@ class CA:
                     if cells[i + 1, j - 1].state == 0 and cells[i + 1, j].state == 0 and cells[i + 1, j + 1].state == 0:
                         return True
         return False
+
     def is_group_of_1s(self, cells, i, j):
         if cells[i, j].state == 1:
             if cells[i - 1, j - 1].state == 1 and cells[i - 1, j].state == 1 and cells[i - 1, j + 1].state == 1:
@@ -161,6 +210,16 @@ class CA:
                     if cells[i + 1, j - 1].state == 1 and cells[i + 1, j].state == 1 and cells[i + 1, j + 1].state == 1:
                         return True
         return False
+
+    def is_cell_changing_start(self, cell):
+        if self.synch_prob == 1:
+            cell.change_strategy = True
+        else:
+            x = random.random()
+            if x <= self.synch_prob:
+                cell.change_strategy = True
+            else:
+                cell.change_strategy = False
 
     def decide_action(self, cells, i, j):
         if self.is_C_correct(cells, i, j):
@@ -294,10 +353,14 @@ class CA:
                         elif cells[i, j].k == 8:
                             num_of_8DC += 1
 
+                    # this is wrong - even if change_strategy it doesn't mean that cell changed strat...
+                    if cells[i, j].change_strategy == True:
+                        num_of_strat_change += 1
+
             # calculate the stats
             f_C = num_of_C / num_of_cells
             f_C_corr = num_of_C_corr / num_of_cells
-            av_sum = 0
+            iter1, av_sum = self.avg_payoff[k]
             f_allC = num_of_allC / num_of_cells
             f_allD = num_of_allD / num_of_cells
             f_kD = num_of_kD / num_of_cells
