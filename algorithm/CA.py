@@ -138,17 +138,16 @@ class CA:
             # copy cells to new array to change strategies and states
             cells_temp = copy.deepcopy(cells)
 
-
             # competition - for now only tournament comp.
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     if cells_temp[i, j].change_strategy:
                         self.tournament_competition(cells, cells_temp, i, j)
 
-            # # mutation
-            # for i in range(1, self.M_rows - 1):
-            #     for j in range(1 , self.N_cols - 1):
-            #
+            # update cell states depending on strategy
+            for i in range(1, self.M_rows - 1):
+                for j in range(1, self.N_cols - 1):
+                    self.update_cell_states(cells, cells_temp, i, j)
 
 
 
@@ -159,7 +158,57 @@ class CA:
         # not ideal but works...
         self.avg_payoff.append(self.avg_payoff[self.num_of_iter - 2])
 
-    # def mutations(self):
+    def update_cell_states(self, cells, cells_temp, i, j):
+        # all D
+        if cells_temp[i, j].strategy == 0:
+            cells_temp[i, j].state = 0
+            return
+        # all C
+        elif cells_temp[i, j].strategy == 1:
+            cells_temp[i, j].state = 1
+            return
+        # kD
+        elif cells_temp[i, j].strategy == 2:
+            # calculate K for neighbourhood in previous iteration
+            k = self.calculate_k_neighbours(cells, i, j)
+            if k <= cells_temp[i, j].k:
+                cells_temp[i, j].state = 1
+            else:
+                cells_temp[i, j].state = 0
+        # kC
+        elif cells_temp[i, j].strategy == 3:
+            k = self.calculate_k_neighbours(cells, i, j)
+            if k <= cells_temp[i, j].k:
+                cells_temp[i, j].state = 1
+            else:
+                cells_temp[i, j].state = 0
+        elif cells_temp[i, j].strategy == 4:
+            k = self.calculate_k_neighbours(cells, i, j)
+            if k <= cells_temp[i, j].k:
+                cells_temp[i, j].state = 0
+            else:
+                cells_temp[i, j].state = 1
+
+
+
+    def calculate_k_neighbours(self, cells, i, j):
+        # count of neighbours with state==1 or state==0 depending on strategy
+        k_0_count = 0
+        k_1_count = 0
+        # loop over neighbourhood
+        for n in range(i - 1, i + 2):
+            for m in range(j - 1, j + 2):
+                if n == i and m == j:
+                    continue
+                if cells[n, m].state == 1:
+                    k_1_count += 1
+                else:
+                    k_0_count += 1
+        if cells[i, j].strategy == 2 or cells[i, j].strategy == 4:
+            return k_0_count
+        else:
+            return k_1_count
+
 
 
     def tournament_competition(self, cells, cells_temp, i, j):

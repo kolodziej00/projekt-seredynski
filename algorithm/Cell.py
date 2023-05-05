@@ -35,7 +35,6 @@ class Cell(QTableWidgetItem):
         # global ID 
         self.id = _id
 
-
         self.group_of_1s = group_of_1s
         self.group_of_0s = group_of_0s
         self.change_strategy = change_strategy
