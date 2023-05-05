@@ -17,7 +17,7 @@ import copy
 class CA:
     def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, num_of_iter,
                  payoff_C_C, payoff_C_D, payoff_D_C, payoff_D_D, is_sharing, synch_prob,
-                 is_tournament, seed = None):
+                 is_tournament, p_state_mut, p_strat_mut, p_0_neigh_mut, p_1_neigh_mut, seed = None):
         # size of CA
         self.M_rows = M_rows
         self.N_cols = N_cols
@@ -40,11 +40,17 @@ class CA:
         # sharing of payoffs
         self.is_sharing = is_sharing
 
-        # competition type, if true - tournament competition else roulette competition
+        # competition type, if true - tournament competition, else roulette competition
         self.is_tournament = is_tournament
 
         # probability that cell will change strategy in each iteration
         self.synch_prob = synch_prob
+
+        # mutations probabilities
+        self.p_state_mut = p_state_mut
+        self.p_strat_mut = p_strat_mut
+        self.p_neigh_0_mut = p_0_neigh_mut
+        self.p_neigh_1_mut = p_1_neigh_mut
 
         # save cells as a list o tuples (num_of_iter, numpy array of Cell instances)
         self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
@@ -128,13 +134,21 @@ class CA:
                     self.calculate_payoff(cells, i, j)
                     sum_payoff_temp += cells[i, j].sum_payoff
             self.avg_payoff.append((k, sum_payoff_temp / cells.size))
+
+            # copy cells to new array to change strategies and states
             cells_temp = copy.deepcopy(cells)
+
 
             # competition - for now only tournament comp.
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     if cells_temp[i, j].change_strategy:
                         self.tournament_competition(cells, cells_temp, i, j)
+
+            # # mutation
+            # for i in range(1, self.M_rows - 1):
+            #     for j in range(1 , self.N_cols - 1):
+            #
 
 
 
@@ -144,6 +158,10 @@ class CA:
 
         # not ideal but works...
         self.avg_payoff.append(self.avg_payoff[self.num_of_iter - 2])
+
+    # def mutations(self):
+
+
     def tournament_competition(self, cells, cells_temp, i, j):
         max_payoff = (i, j, cells[i, j].sum_payoff)
         for k in range(i - 1, i + 2):

@@ -26,6 +26,8 @@ from data.payoff import Payoff
 
 from algorithm.CA import CA
 
+
+# TODO: Handle many iterations
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -74,7 +76,9 @@ class MainWindow(QMainWindow):
                        self.data.strategies.all_D, self.data.strategies.k_D, self.data.strategies.k_C,
                        self.data.strategies.k_var_min, self.data.strategies.k_var_max, self.data.iterations.num_of_iter,
                        self.data.payoff.d, self.data.payoff.c, self.data.payoff.b, self.data.payoff.a, self.canvas.isSharing,
-                       self.data.synch.synch_prob, self.data.competition.isTournament, seed)
+                       self.data.synch.synch_prob, self.data.competition.isTournament, self.data.mutations.p_state_mut,
+                       self.data.mutations.p_strat_mut, self.data.mutations.p_0_neighb_mut, self.data.mutations.p_1_neighb_mut,
+                           seed)
 
         k, cells = self.automata.cells[0]
         for n in range(rows):
@@ -161,7 +165,8 @@ class MainWindow(QMainWindow):
 
         self.save_results()
         
-    
+
+
     def state_color_handler(self):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
