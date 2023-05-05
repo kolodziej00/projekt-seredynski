@@ -125,8 +125,7 @@ class CA:
                     if not cells[i, j].group_of_1s:
                         cells[i, j].group_of_0s = self.is_group_of_0s(cells, i, j)
                     # decide whether cell will be changing strategy in this iteration
-                    self.is_cell_changing_start(cells[i, j])
-
+                    self.is_cell_changing_strategy(cells[i, j])
 
             # calculate payoffs
             for i in range(1, self.M_rows - 1):
@@ -139,6 +138,7 @@ class CA:
             cells_temp = copy.deepcopy(cells)
 
             # competition - for now only tournament comp.
+            # cells change strategy for competition winning cell's strategy with sync_prob probability
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     if cells_temp[i, j].change_strategy:
@@ -167,16 +167,9 @@ class CA:
         elif cells_temp[i, j].strategy == 1:
             cells_temp[i, j].state = 1
             return
-        # kD
-        elif cells_temp[i, j].strategy == 2:
+        # kC and kD
+        elif cells_temp[i, j].strategy == 3 or cells_temp[i, j].strategy == 2:
             # calculate K for neighbourhood in previous iteration
-            k = self.calculate_k_neighbours(cells, i, j)
-            if k <= cells_temp[i, j].k:
-                cells_temp[i, j].state = 1
-            else:
-                cells_temp[i, j].state = 0
-        # kC
-        elif cells_temp[i, j].strategy == 3:
             k = self.calculate_k_neighbours(cells, i, j)
             if k <= cells_temp[i, j].k:
                 cells_temp[i, j].state = 1
@@ -190,7 +183,7 @@ class CA:
                 cells_temp[i, j].state = 1
 
 
-
+    # calculate how many neighbours defect/cooperate
     def calculate_k_neighbours(self, cells, i, j):
         # count of neighbours with state==1 or state==0 depending on strategy
         k_0_count = 0
@@ -210,7 +203,8 @@ class CA:
             return k_1_count
 
 
-
+    # tournament competition - wins neighbour with highest payoff
+    #
     def tournament_competition(self, cells, cells_temp, i, j):
         max_payoff = (i, j, cells[i, j].sum_payoff)
         for k in range(i - 1, i + 2):
@@ -260,8 +254,6 @@ class CA:
                         cells[i, j].sum_payoff += self.payoff_C_D
         cells[i, j].avg_payoff = cells[i, j].sum_payoff / 8
 
-
-
     def is_group_of_0s(self, cells, i, j):
         if cells[i, j].state == 0:
             if cells[i - 1, j - 1].state == 0 and cells[i - 1, j].state == 0 and cells[i - 1, j + 1].state == 0:
@@ -278,7 +270,7 @@ class CA:
                         return True
         return False
 
-    def is_cell_changing_start(self, cell):
+    def is_cell_changing_strategy(self, cell):
         if self.synch_prob == 1:
             cell.change_strategy = True
         else:
