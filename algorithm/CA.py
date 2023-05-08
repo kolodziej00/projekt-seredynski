@@ -143,13 +143,27 @@ class CA:
                 for j in range(1, self.N_cols - 1):
                     if cells_temp[i, j].change_strategy:
                         self.tournament_competition(cells, cells_temp, i, j)
+                    # TODO: roulette competition
+
+                    # strategy mutation with p_strat_mut probability
+                    x = random.random()
+                    if x <= self.p_strat_mut:
+                        self.mutate_strat(cells_temp[i, j])
+
 
             # update cell states depending on strategy
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     self.update_cell_states(cells, cells_temp, i, j)
 
+                    # cell state mutation with p_state_mut probability
+                    x = random.random()
+                    if x <= self.p_state_mut:
+                        self.mutate_state(cells_temp[i, j])
 
+            # mutation when cell is in group od 1s or group of 0s
+            # (shouldn't it be done earlier?)
+            # for i in range(1 , self.M_rows - 1):
 
 
 
@@ -157,6 +171,19 @@ class CA:
 
         # not ideal but works...
         self.avg_payoff.append(self.avg_payoff[self.num_of_iter - 2])
+    # mutation of cell state by negating current state
+    def mutate_state(self, cell):
+        if cell.state == 0:
+            cell.state = 1
+        else:
+            cell.state = 0
+
+    # mutation of strategy - for now simple random choice
+    def mutate_strat(self, cell):
+        x = random.randint(0, 4)
+        cell.strategy = x
+        x = random.randint(0, 8)
+        cell.k = x
 
     def update_cell_states(self, cells, cells_temp, i, j):
         # all D
@@ -182,7 +209,6 @@ class CA:
             else:
                 cells_temp[i, j].state = 1
 
-
     # calculate how many neighbours defect/cooperate
     def calculate_k_neighbours(self, cells, i, j):
         # count of neighbours with state==1 or state==0 depending on strategy
@@ -202,9 +228,7 @@ class CA:
         else:
             return k_1_count
 
-
-    # tournament competition - wins neighbour with highest payoff
-    #
+    # tournament competition - wins neighbour with highest payofd
     def tournament_competition(self, cells, cells_temp, i, j):
         max_payoff = (i, j, cells[i, j].sum_payoff)
         for k in range(i - 1, i + 2):
