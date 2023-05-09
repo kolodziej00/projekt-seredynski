@@ -347,9 +347,11 @@ class Ui_MainWindow(object):
         self.label_15 = QLabel(self.centralwidget)
         self.label_15.setObjectName(u"label_15")
         self.label_15.setGeometry(QRect(490, 50, 49, 16))
+
         self.lcdNumber_iters = QLCDNumber(self.centralwidget)
         self.lcdNumber_iters.setObjectName(u"lcdNumber_iters")
         self.lcdNumber_iters.setGeometry(QRect(540, 50, 51, 21))
+
         self.label_27 = QLabel(self.centralwidget)
         self.label_27.setObjectName(u"label_27")
         self.label_27.setGeometry(QRect(90, 540, 49, 21))
@@ -435,7 +437,7 @@ class Ui_MainWindow(object):
         self.radioButton_custom.toggled.connect(self.spinBox_custom_seed.setEnabled)
         self.radioButton_debug.toggled.connect(self.groupBox_debug.setEnabled)
         self.spinBox_iters.valueChanged.connect(self.lcdNumber_iters.display)
-
+        self.spinBox_iters.valueChanged.connect(MainWindow.change_iter_display)
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 

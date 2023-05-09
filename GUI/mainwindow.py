@@ -33,6 +33,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.visualization_mode = 0
 
     def displayDataWarning(self):
         msg = QMessageBox()
@@ -153,6 +154,7 @@ class MainWindow(QMainWindow):
                              self.ui.doubleSpinBox_c.value(),
                              self.ui.doubleSpinBox_d.value())
 
+        self.visualization_mode = 0  # state visualization
         self.setData()
         
         self.ui.pushButton_states.setDisabled(0)
@@ -163,6 +165,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_actions.setDisabled(0)
         self.ui.pushButton_states.setDisabled(0)
 
+
         self.save_results()
         
 
@@ -171,13 +174,15 @@ class MainWindow(QMainWindow):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
         selected = []
-        k, cells = self.automata.cells[0]
+        iter = self.ui.spinBox_iters.value()
+        k, cells = self.automata.cells[iter]
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255, 255, 255, 255))
                 if cells[i, j].state == 1:
                     selected.append((i, j))
-        self.changeCellsColor(selected, 255, 100, 0)      
+        self.changeCellsColor(selected, 255, 100, 0)
+        self.visualization_mode = 0
         
     def strategies_color_handler(self):
         rows = self.data.canvas.rows
@@ -187,7 +192,8 @@ class MainWindow(QMainWindow):
         selected_kD = []
         selected_kC = []
         selected_kDC = []
-        k, cells = self.automata.cells[0]
+        iter = self.ui.spinBox_iters.value()
+        k, cells = self.automata.cells[iter]
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255, 255, 255, 255))
@@ -212,6 +218,7 @@ class MainWindow(QMainWindow):
         self.changeCellsColor(selected_kD, 0, 128, 0) # green
         self.changeCellsColor(selected_kC, 0, 255, 255) # cyan
         self.changeCellsColor(selected_kDC, 255, 20, 147) # pink
+        self.visualization_mode = 1
 
     def kD_strategies_color_handler(self):
         rows = self.data.canvas.rows
@@ -225,7 +232,8 @@ class MainWindow(QMainWindow):
         selected_k_6 = []
         selected_k_7 = []
         selected_k_8 = []
-        k, cells = self.automata.cells[0]
+        iter = self.ui.spinBox_iters.value()
+        k, cells = self.automata.cells[iter]
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 255))
@@ -260,6 +268,8 @@ class MainWindow(QMainWindow):
         self.changeCellsColor(selected_k_7, 0, 128, 0, 218)
         self.changeCellsColor(selected_k_8, 0, 128, 0, 255)
 
+        self.visualization_mode = 2
+
     def kC_strategies_color_handler(self):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
@@ -272,7 +282,8 @@ class MainWindow(QMainWindow):
         selected_k_6 = []
         selected_k_7 = []
         selected_k_8 = []
-        k, cells = self.automata.cells[0]
+        iter = self.ui.spinBox_iters.value()
+        k, cells = self.automata.cells[iter]
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 200))
@@ -306,6 +317,8 @@ class MainWindow(QMainWindow):
         self.changeCellsColor(selected_k_7, 0, 255, 255, 218)
         self.changeCellsColor(selected_k_8, 0, 255, 255, 255)
 
+        self.visualization_mode = 3
+
     def kDC_strategies_color_handler(self):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
@@ -318,7 +331,8 @@ class MainWindow(QMainWindow):
         selected_k_6 = []
         selected_k_7 = []
         selected_k_8 = []
-        k, cells = self.automata.cells[0]
+        iter = self.ui.spinBox_iters.value()
+        k, cells = self.automata.cells[iter]
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 200))
@@ -351,6 +365,8 @@ class MainWindow(QMainWindow):
         self.changeCellsColor(selected_k_6, 255, 20, 147, 187)
         self.changeCellsColor(selected_k_7, 255, 20, 147, 218)
         self.changeCellsColor(selected_k_8, 255, 20, 147, 255)
+
+        self.visualization_mode = 4
 
     def save_results(self):
         f = open("result.txt", "w")
@@ -398,3 +414,20 @@ class MainWindow(QMainWindow):
             f.write("        f_5DC       f_6DC       f_7DC       f_8DC\n")
             for statistics in self.automata.statistics:
                 statistics.write_stats_to_file(f)
+
+
+    # update display of CA depending on iteration
+    def change_iter_display(self):
+        if self.visualization_mode == 0:
+            self.state_color_handler()
+        elif self.visualization_mode == 1:  # strategies
+            self.strategies_color_handler()
+        elif self.visualization_mode == 2:  # kD
+            self.kD_strategies_color_handler()
+        elif self.visualization_mode == 3:  # kC
+            self.kC_strategies_color_handler()
+        else:  # kDC
+            self.kDC_strategies_color_handler()
+
+
+
