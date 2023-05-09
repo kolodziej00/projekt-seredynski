@@ -418,6 +418,7 @@ class MainWindow(QMainWindow):
 
 
     # update display of CA depending on iteration
+    # visualization mode defines what type of visualization is chosen (state/strategy)
     def change_iter_display(self):
         if self.visualization_mode == 0:
             self.state_color_handler()
@@ -432,13 +433,9 @@ class MainWindow(QMainWindow):
 
 
 
-    # def start_animation(self):
-    #     while self.ui.spinBox_iters.value() != self.iterations.num_of_iter - 1:
-    #         iter = self.ui.spinBox_iters.value()
-    #         self.ui.spinBox_iters.setValue(iter + 1)
-    #         self.ui.graphicsView_CA.repaint()
-    #         # time.sleep(2)
 
+
+    # animation starts here
     def start_animation(self):
         iter = self.ui.spinBox_iters.value()
         self.ui.spinBox_iters.setValue(iter + 1)
