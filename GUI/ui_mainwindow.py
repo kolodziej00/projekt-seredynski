@@ -373,6 +373,7 @@ class Ui_MainWindow(object):
         self.pushButton_start_anim = QPushButton(self.centralwidget)
         self.pushButton_start_anim.setObjectName(u"pushButton_start_anim")
         self.pushButton_start_anim.setGeometry(QRect(580, 400, 61, 21))
+        self.pushButton_start_anim.clicked.connect(MainWindow.start_animation)
         self.spinBox_iters = QSpinBox(self.centralwidget)
         self.spinBox_iters.setObjectName(u"spinBox_iters")
         self.spinBox_iters.setGeometry(QRect(510, 400, 61, 25))

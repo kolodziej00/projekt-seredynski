@@ -5,6 +5,7 @@ Created on Sat Apr 22 10:35:46 2023
 @author: pozdro
 """
 import math
+import time
 
 from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem, QMessageBox)
 from PySide6.QtGui import (QColor, QPixmap)
@@ -153,7 +154,7 @@ class MainWindow(QMainWindow):
                              self.ui.doubleSpinBox_b.value(),
                              self.ui.doubleSpinBox_c.value(),
                              self.ui.doubleSpinBox_d.value())
-
+        self.ui.spinBox_iters.setMaximum(self.iterations.num_of_iter-1)
         self.visualization_mode = 0  # state visualization
         self.setData()
         
@@ -430,4 +431,20 @@ class MainWindow(QMainWindow):
             self.kDC_strategies_color_handler()
 
 
+
+    # def start_animation(self):
+    #     while self.ui.spinBox_iters.value() != self.iterations.num_of_iter - 1:
+    #         iter = self.ui.spinBox_iters.value()
+    #         self.ui.spinBox_iters.setValue(iter + 1)
+    #         self.ui.graphicsView_CA.repaint()
+    #         # time.sleep(2)
+
+    def start_animation(self):
+        iter = self.ui.spinBox_iters.value()
+        self.ui.spinBox_iters.setValue(iter + 1)
+        self.ui.graphicsView_CA.repaint()
+        if self.ui.spinBox_iters.value() != self.iterations.num_of_iter - 1:
+            return self.ui.pushButton_start_anim.click()
+
+        # time.sleep(2)
 
