@@ -19,9 +19,10 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpi
     QFrame, QGraphicsView, QTableWidget, QGroupBox, QLCDNumber,
     QLabel, QMainWindow, QMenuBar, QPushButton,
     QRadioButton, QSizePolicy, QSpinBox, QStatusBar,
-    QWidget, QAbstractItemView)
+    QWidget, QAbstractItemView, QMessageBox)
 
 class Ui_MainWindow(object):
+
     def disableStartButton(self):
         print("Disable start button!")
         # self.pushButton_start.setEnabled(False)    
@@ -56,15 +57,19 @@ class Ui_MainWindow(object):
         self.pushButton_kD = QPushButton(self.centralwidget)
         self.pushButton_kD.setObjectName(u"pushButton_kD")
         self.pushButton_kD.setGeometry(QRect(560, 20, 80, 24))
+        self.pushButton_kD.clicked.connect(MainWindow.kD_strategies_color_handler)
+
         
         self.pushButton_kC = QPushButton(self.centralwidget)
         self.pushButton_kC.setObjectName(u"pushButton_kC")
         self.pushButton_kC.setGeometry(QRect(650, 20, 80, 24))
+        self.pushButton_kC.clicked.connect(MainWindow.kC_strategies_color_handler)
         
         self.pushButton_kDC = QPushButton(self.centralwidget)
         self.pushButton_kDC.setObjectName(u"pushButton_kDC")
         self.pushButton_kDC.setGeometry(QRect(740, 20, 80, 24))
-        
+        self.pushButton_kDC.clicked.connect(MainWindow.kDC_strategies_color_handler)
+
         self.pushButton_actions = QPushButton(self.centralwidget)
         self.pushButton_actions.setObjectName(u"pushButton_actions")
         self.pushButton_actions.setGeometry(QRect(830, 20, 80, 24))
