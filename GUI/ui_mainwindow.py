@@ -73,6 +73,7 @@ class Ui_MainWindow(object):
         self.pushButton_actions = QPushButton(self.centralwidget)
         self.pushButton_actions.setObjectName(u"pushButton_actions")
         self.pushButton_actions.setGeometry(QRect(830, 20, 80, 24))
+        self.pushButton_actions.clicked.connect(MainWindow.action_color_handler)
         
         # disabling buttons before simulation has started
         self.pushButton_states.setDisabled(1)

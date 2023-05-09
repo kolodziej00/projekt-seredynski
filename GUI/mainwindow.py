@@ -369,6 +369,20 @@ class MainWindow(QMainWindow):
 
         self.visualization_mode = 4
 
+    def action_color_handler(self):
+        rows = self.data.canvas.rows
+        cols = self.data.canvas.cols
+        selected = []
+        iter = self.ui.spinBox_iters.value()
+        k, cells = self.automata.cells[iter]
+        for i in range(rows):
+            for j in range(cols):
+                self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 255, 255))
+                if cells[i, j].action == 1:
+                    selected.append((i, j))
+        self.changeCellsColor(selected, 255, 100, 0)
+        self.visualization_mode = 5
+
     def save_results(self):
         f = open("result.txt", "w")
         f.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
@@ -428,8 +442,10 @@ class MainWindow(QMainWindow):
             self.kD_strategies_color_handler()
         elif self.visualization_mode == 3:  # kC
             self.kC_strategies_color_handler()
-        else:  # kDC
+        elif self.visualization_mode == 4:  # kDC
             self.kDC_strategies_color_handler()
+        else:  # action
+            self.action_color_handler()
 
 
 
