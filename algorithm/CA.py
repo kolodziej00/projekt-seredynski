@@ -121,10 +121,7 @@ class CA:
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     cells[i, j].action = self.decide_action(cells, i, j)
-                    cells[i, j].group_of_1s  = self.is_group_of_1s(cells, i, j)
-                    if not cells[i, j].group_of_1s:
-                        cells[i, j].group_of_0s = self.is_group_of_0s(cells, i, j)
-                    # decide whether cell will be changing strategy in this iteration
+                    # decide whether cell will be changing strategy in this iteration with synch_prob probability
                     self.is_cell_changing_strategy(cells[i, j])
 
             # calculate payoffs
@@ -163,7 +160,21 @@ class CA:
 
             # mutation when cell is in group od 1s or group of 0s
             # (shouldn't it be done earlier?)
-            # for i in range(1 , self.M_rows - 1):
+            for i in range(1 , self.M_rows - 1):
+                for j in range(1, self.N_cols - 1):
+                    cells_temp[i, j].group_of_1s  = self.is_group_of_1s(cells_temp, i, j)
+                    if not cells_temp[i, j].group_of_1s:
+                        cells_temp[i, j].group_of_0s = self.is_group_of_0s(cells_temp, i, j)
+                    if cells_temp[i, j].group_of_0s:
+                        x = random.random()
+                        if x <= self.p_neigh_0_mut:
+                            cells_temp[i, j].state = 1
+                    elif cells_temp[i, j].group_of_1s:
+                        x = random.random()
+                        if x <= self.p_neigh_1_mut:
+                            cells_temp[i, j].state = 0
+
+
 
 
 
@@ -228,7 +239,7 @@ class CA:
         else:
             return k_1_count
 
-    # tournament competition - wins neighbour with highest payofd
+    # tournament competition - wins neighbour with highest payoff
     def tournament_competition(self, cells, cells_temp, i, j):
         max_payoff = (i, j, cells[i, j].sum_payoff)
         for k in range(i - 1, i + 2):
@@ -268,7 +279,7 @@ class CA:
             # if cell's action is C then cell can't be in group_of_1s or group_of_0s
             for k in range(i - 1,  i + 2):
                 for n in range(j - 1, j + 2):
-                    if k == i == j == n:
+                    if k == i and j == n:
                         continue
                     if cells[k, n].action == 1:
                         cells[i, j].payoffs[m] = self.payoff_C_C
@@ -361,7 +372,7 @@ class CA:
                     num_of_cells += 1
                     if cells[i, j].state == 1:
                         num_of_C += 1
-                        if self.is_C_correct(cells, i, j):
+                        if self.is_C_correct(cells, i, j) or self.is_D_correct(cells, i, j):
                             num_of_C_corr += 1
 
                     # all D
