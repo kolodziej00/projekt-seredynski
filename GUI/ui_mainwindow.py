@@ -15,17 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QDoubleSpinBox,
+from PySide6.QtWidgets import (QButtonGroup, QCheckBox, QDoubleSpinBox,
     QFrame, QGraphicsView, QTableWidget, QGroupBox, QLCDNumber,
     QLabel, QMainWindow, QMenuBar, QPushButton,
-    QRadioButton, QSizePolicy, QSpinBox, QStatusBar,
-    QWidget, QAbstractItemView, QMessageBox)
+    QRadioButton, QSpinBox, QStatusBar,
+    QWidget, QAbstractItemView)
 
 class Ui_MainWindow(object):
 
     def disableStartButton(self):
-        print("Disable start button!")
-        # self.pushButton_start.setEnabled(False)    
+        self.pushButton_start.setEnabled(False)   
 
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -42,7 +41,6 @@ class Ui_MainWindow(object):
         self.graphicsView_CA.setSelectionMode(QAbstractItemView.SingleSelection)
         self.graphicsView_CA.verticalHeader().setMinimumSectionSize(1)
         self.graphicsView_CA.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # self.graphicsView_CA.setDisabled(1)
         
         self.pushButton_states = QPushButton(self.centralwidget)
         self.pushButton_states.setObjectName(u"pushButton_states")
@@ -374,7 +372,7 @@ class Ui_MainWindow(object):
         self.pushButton_start_anim = QPushButton(self.centralwidget)
         self.pushButton_start_anim.setObjectName(u"pushButton_start_anim")
         self.pushButton_start_anim.setGeometry(QRect(580, 400, 61, 21))
-        self.pushButton_start_anim.clicked.connect(MainWindow.start_animation)
+        self.pushButton_start_anim.clicked.connect(MainWindow.start_animation_thread)
         self.spinBox_iters = QSpinBox(self.centralwidget)
         self.spinBox_iters.setObjectName(u"spinBox_iters")
         self.spinBox_iters.setGeometry(QRect(510, 400, 61, 25))
@@ -386,6 +384,7 @@ class Ui_MainWindow(object):
         self.pushButton_stop = QPushButton(self.centralwidget)
         self.pushButton_stop.setObjectName(u"pushButton_stop")
         self.pushButton_stop.setGeometry(QRect(650, 400, 61, 21))
+        self.pushButton_stop.clicked.connect(MainWindow.pause_animation)
         self.pushButton_save = QPushButton(self.centralwidget)
         self.pushButton_save.setObjectName(u"pushButton_save")
         self.pushButton_save.setGeometry(QRect(720, 400, 81, 21))
@@ -402,7 +401,7 @@ class Ui_MainWindow(object):
         self.pushButton_start.setObjectName(u"pushButton_start")
         self.pushButton_start.setGeometry(QRect(240, 540, 111, 91))
         self.pushButton_start.clicked.connect(MainWindow.startSimulation)
-        self.pushButton_start.clicked.connect(self.disableStartButton)
+        # self.pushButton_start.clicked.connect(self.zeroSpinBoxIter)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
