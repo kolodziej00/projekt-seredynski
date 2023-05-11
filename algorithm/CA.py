@@ -165,8 +165,6 @@ class CA:
             # (shouldn't it be done earlier?)
             # for i in range(1 , self.M_rows - 1):
 
-
-
             self.cells.append((k + 1, cells_temp))
 
         # not ideal but works...
