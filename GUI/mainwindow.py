@@ -4,8 +4,10 @@ Created on Sat Apr 22 10:35:46 2023
 
 @author: pozdro
 """
+import datetime
 import math
 import time
+import asyncio
 
 from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem, QMessageBox)
 from PySide6.QtGui import (QColor, QPixmap)
@@ -200,7 +202,11 @@ class MainWindow(QMainWindow):
         self.changeCellsColor(selected, 255, 100, 0)
         self.visualization_mode = 0
         
+        
     def strategies_color_handler(self):
+        if self.isAnimationRunning == True:
+            self.animation.extendSleepTime()
+            
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
         selected_all_C = []
@@ -237,6 +243,9 @@ class MainWindow(QMainWindow):
         self.visualization_mode = 1
 
     def kD_strategies_color_handler(self):
+        if self.isAnimationRunning == True:
+            self.animation.extendSleepTime()
+
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
         selected_k_0 = []
@@ -287,6 +296,9 @@ class MainWindow(QMainWindow):
         self.visualization_mode = 2
 
     def kC_strategies_color_handler(self):
+        if self.isAnimationRunning == True:
+            self.animation.extendSleepTime()
+        
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
         selected_k_0 = []
@@ -336,6 +348,9 @@ class MainWindow(QMainWindow):
         self.visualization_mode = 3
 
     def kDC_strategies_color_handler(self):
+        if self.isAnimationRunning == True:
+            self.animation.extendSleepTime()
+
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
         selected_k_0 = []
@@ -390,6 +405,7 @@ class MainWindow(QMainWindow):
         selected = []
         iter = self.ui.spinBox_iters.value()
         k, cells = self.automata.cells[iter]
+
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 255, 255))
@@ -397,6 +413,8 @@ class MainWindow(QMainWindow):
                     selected.append((i, j))
         self.changeCellsColor(selected, 255, 100, 0)
         self.visualization_mode = 5
+        
+
 
     def save_results(self):
         f = open("result.txt", "w")
@@ -472,20 +490,19 @@ class MainWindow(QMainWindow):
     # create a new seperate thread for simulation
     def start_animation_thread(self):
         if self.isAnimationRunning == True:
-            if self.animation.stillRunning():
-                self.animation.terminate()
             self.animation.play()
         else:
             self.isAnimationRunning = True
             self.ui.disableStartButton()
             numOfIters = self.iterations.num_of_iter
-            self.animation = Animation(self, 0, numOfIters)
+            microSleepTime = 2 * self.data.canvas.rows * self.data.canvas.cols
+            secSleepTime = microSleepTime / 10000
+            self.animation = Animation(self, 0, numOfIters, secSleepTime)
             self.threadpool.start(self.animation)
 
     # animation starts here
     def start_animation(self):
-        self.mutex.lock()
         iter = self.ui.spinBox_iters.value()
         self.ui.spinBox_iters.setValue(iter + 1)
         self.ui.graphicsView_CA.repaint()
-        self.mutex.unlock()
+        
