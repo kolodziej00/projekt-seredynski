@@ -11,9 +11,6 @@ from algorithm.Statistics import Statistics
 import sys
 import copy
 
-
-
-
 class CA:
     def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, num_of_iter,
                  payoff_C_C, payoff_C_D, payoff_D_C, payoff_D_D, is_sharing, synch_prob,
@@ -121,10 +118,7 @@ class CA:
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     cells[i, j].action = self.decide_action(cells, i, j)
-                    cells[i, j].group_of_1s  = self.is_group_of_1s(cells, i, j)
-                    if not cells[i, j].group_of_1s:
-                        cells[i, j].group_of_0s = self.is_group_of_0s(cells, i, j)
-                    # decide whether cell will be changing strategy in this iteration
+                    # decide whether cell will be changing strategy in this iteration with synch_prob probability
                     self.is_cell_changing_strategy(cells[i, j])
 
             # calculate payoffs
@@ -146,29 +140,50 @@ class CA:
                     # TODO: roulette competition
 
                     # strategy mutation with p_strat_mut probability
-                    x = random.random()
-                    if x <= self.p_strat_mut:
-                        self.mutate_strat(cells_temp[i, j])
-
+                    if self.p_strat_mut != 0:
+                        x = random.random()
+                        if x <= self.p_strat_mut:
+                            self.mutate_strat(cells_temp[i, j])
 
             # update cell states depending on strategy
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
+
                     self.update_cell_states(cells, cells_temp, i, j)
 
+                    # resetting group_of_1s and 0s to avoid false state changes in next step
+                    cells_temp[i, j].group_of_1s = False
+                    cells_temp[i, j].group_of_0s = False
+
                     # cell state mutation with p_state_mut probability
-                    x = random.random()
-                    if x <= self.p_state_mut:
-                        self.mutate_state(cells_temp[i, j])
+                    if self.p_state_mut != 0:
+                        x = random.random()
+                        if x <= self.p_state_mut:
+                            self.mutate_state(cells_temp[i, j])
 
             # mutation when cell is in group od 1s or group of 0s
             # (shouldn't it be done earlier?)
+
+            for i in range(1, self.M_rows - 1):
+                for j in range(1, self.N_cols - 1):
+                    cells_temp[i, j].group_of_1s = self.is_group_of_1s(cells_temp, i, j)
+                    if not cells_temp[i, j].group_of_1s:
+                        cells_temp[i, j].group_of_0s = self.is_group_of_0s(cells_temp, i, j)
+                    if cells_temp[i, j].group_of_0s:
+                        x = random.random()
+                        if x <= self.p_neigh_0_mut:
+                            cells_temp[i, j].state = 1
+                    elif cells_temp[i, j].group_of_1s:
+                        x = random.random()
+                        if x <= self.p_neigh_1_mut:
+                            cells_temp[i, j].state = 0
             # for i in range(1 , self.M_rows - 1):
 
             self.cells.append((k + 1, cells_temp))
 
         # not ideal but works...
         self.avg_payoff.append(self.avg_payoff[self.num_of_iter - 2])
+
     # mutation of cell state by negating current state
     def mutate_state(self, cell):
         if cell.state == 0:
@@ -226,7 +241,7 @@ class CA:
         else:
             return k_1_count
 
-    # tournament competition - wins neighbour with highest payofd
+    # tournament competition - wins neighbour with the highest payoff
     def tournament_competition(self, cells, cells_temp, i, j):
         max_payoff = (i, j, cells[i, j].sum_payoff)
         for k in range(i - 1, i + 2):
@@ -239,6 +254,22 @@ class CA:
         if k != i or n != j:
             cells_temp[i, j].strategy = cells[k, n].strategy
             cells_temp[i, j].k = cells[k, n].k
+    # roulette competition - neighbour with the highest payoff has the highest probability to win
+    # def roulette_competition(self, cells, cells_temp, i, j):
+    #     payoffs = []
+    #     sum_of_payoffs = 0
+    #     for k in range(i - 1, i + 2):
+    #         for n in range(j - 1, j + 2):
+    #             payoffs.append((k, n, cells[k, n].sum_payoff))
+    #             sum_of_payoffs += cells[k, n].sum_payoff
+    #     probabilities = [payoff/sum_of_payoffs for k, n, payoff in payoffs]
+    #     probabilities_standarized = []
+    #     sum_probabilities = 0
+    #     for probability in probabilities:
+    #         sum_probabilities += probability
+    #         probabilities_standarized.append(sum_o)
+    #     x = random.random()
+
 
     def calculate_payoff(self, cells, i , j):
         # action is D
@@ -266,7 +297,7 @@ class CA:
             # if cell's action is C then cell can't be in group_of_1s or group_of_0s
             for k in range(i - 1,  i + 2):
                 for n in range(j - 1, j + 2):
-                    if k == i == j == n:
+                    if k == i and j == n:
                         continue
                     if cells[k, n].action == 1:
                         cells[i, j].payoffs[m] = self.payoff_C_C
@@ -359,7 +390,7 @@ class CA:
                     num_of_cells += 1
                     if cells[i, j].state == 1:
                         num_of_C += 1
-                        if self.is_C_correct(cells, i, j):
+                        if self.is_C_correct(cells, i, j) or self.is_D_correct(cells, i, j):
                             num_of_C_corr += 1
 
                     # all D
