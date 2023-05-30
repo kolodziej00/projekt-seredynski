@@ -500,6 +500,11 @@ class CA:
             f_kC = num_of_kC / num_of_cells
             f_kDC = num_of_kDC / num_of_cells
             f_strat_ch = num_of_strat_change / num_of_cells
+
+            # if num_of_kD = 0 then num_of_XD (X = 0, 1...) also = 0, so the division will be = 0
+            # adding 1 just to make it pass
+            if num_of_kD == 0:
+                num_of_kD = 1
             f_0D = num_of_0D / num_of_kD
             f_1D = num_of_1D / num_of_kD
             f_2D = num_of_2D / num_of_kD
@@ -510,6 +515,8 @@ class CA:
             f_7D = num_of_7D / num_of_kD
             f_8D = num_of_8D / num_of_kD
 
+            if num_of_kC == 0:
+                num_of_kC = 1
             f_0C = num_of_0C / num_of_kC
             f_1C = num_of_1C / num_of_kC
             f_2C = num_of_2C / num_of_kC
@@ -520,6 +527,8 @@ class CA:
             f_7C = num_of_7C / num_of_kC
             f_8C = num_of_8C / num_of_kC
 
+            if num_of_kDC == 0:
+                num_of_kDC = 1
             f_0DC = num_of_0DC / num_of_kDC
             f_1DC = num_of_1DC / num_of_kDC
             f_2DC = num_of_2DC / num_of_kDC

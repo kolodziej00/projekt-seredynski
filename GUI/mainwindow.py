@@ -192,44 +192,116 @@ class MainWindow(QMainWindow):
                 for j in range(cols):
                     # state coloring
                     if cells[i, j].state == 1:
+                        coloring_state_temp.append((i, j))
+                        # all D
+                    if cells[i, j].strategy == 0:
+                        coloring_allD_temp.append((i, j))
+                        # all C
+                    elif cells[i, j].strategy == 1:
+                        coloring_allC_temp.append((i, j))
+                        # kD
+                    elif cells[i, j].strategy == 2:
+                        coloring_kD_temp.append((i, j))
+                        if cells[i, j].k == 0:
+                            coloring_kD_0_temp.append((i, j))
+                        elif cells[i, j].k == 1:
+                            coloring_kD_1_temp.append((i, j))
+                        elif cells[i, j].k == 2:
+                            coloring_kD_2_temp.append((i, j))
+                        elif cells[i, j].k == 3:
+                            coloring_kD_3_temp.append((i, j))
+                        elif cells[i, j].k == 4:
+                            coloring_kD_4_temp.append((i, j))
+                        elif cells[i, j].k == 5:
+                            coloring_kD_5_temp.append((i, j))
+                        elif cells[i, j].k == 6:
+                            coloring_kD_6_temp.append((i, j))
+                        elif cells[i, j].k == 7:
+                            coloring_kD_7_temp.append((i, j))
+                        elif cells[i, j].k == 8:
+                            coloring_kD_8_temp.append((i, j))
+                        # kC
+                    elif cells[i, j].strategy == 3:
+                        coloring_kC_temp.append((i, j))
+                        if cells[i, j].k == 0:
+                            coloring_kC_0_temp.append((i, j))
+                        elif cells[i, j].k == 1:
+                            coloring_kC_1_temp.append((i, j))
+                        elif cells[i, j].k == 2:
+                            coloring_kC_2_temp.append((i, j))
+                        elif cells[i, j].k == 3:
+                            coloring_kC_3_temp.append((i, j))
+                        elif cells[i, j].k == 4:
+                            coloring_kC_4_temp.append((i, j))
+                        elif cells[i, j].k == 5:
+                            coloring_kC_5_temp.append((i, j))
+                        elif cells[i, j].k == 6:
+                            coloring_kC_6_temp.append((i, j))
+                        elif cells[i, j].k == 7:
+                            coloring_kC_7_temp.append((i, j))
+                        elif cells[i, j].k == 8:
+                            coloring_kC_8_temp.append((i, j))
+                        # kDC
+                    elif cells[i, j].strategy == 4:
+                        coloring_kDC_temp.append((i, j))
+                        if cells[i, j].k == 0:
+                            coloring_kDC_0_temp.append((i, j))
+                        elif cells[i, j].k == 1:
+                            coloring_kDC_1_temp.append((i, j))
+                        elif cells[i, j].k == 2:
+                            coloring_kDC_2_temp.append((i, j))
+                        elif cells[i, j].k == 3:
+                            coloring_kDC_3_temp.append((i, j))
+                        elif cells[i, j].k == 4:
+                            coloring_kDC_4_temp.append((i, j))
+                        elif cells[i, j].k == 5:
+                            coloring_kDC_5_temp.append((i, j))
+                        elif cells[i, j].k == 6:
+                            coloring_kDC_6_temp.append((i, j))
+                        elif cells[i, j].k == 7:
+                            coloring_kDC_7_temp.append((i, j))
+                        elif cells[i, j].k == 8:
+                            coloring_kDC_8_temp.append((i, j))
+                    if cells[i, j].action == 1:
+                        coloring_actions_temp.append((i, j))
 
 
 
 
-            self.coloring_state.append((iter, coloring_state_temp))
-            self.coloring_allC.append((iter, coloring_allC_temp))
-            self.coloring_allD.append((iter, coloring_allD_temp))
-            self.coloring_kD.append((iter, coloring_kD_temp))
-            self.coloring_kC.append((iter, coloring_kC_temp))
-            self.coloring_kDC.append((iter, coloring_kDC_temp))
-            self.coloring_kD_0.append((iter, coloring_kD_0_temp))
-            self.coloring_kD_1.append((iter, coloring_kD_1_temp))
-            self.coloring_kD_2.append((iter, coloring_kD_2_temp))
-            self.coloring_kD_3.append((iter, coloring_kD_3_temp))
-            self.coloring_kD_4.append((iter, coloring_kD_4_temp))
-            self.coloring_kD_5.append((iter, coloring_kD_5_temp))
-            self.coloring_kD_6.append((iter, coloring_kD_6_temp))
-            self.coloring_kD_7.append((iter, coloring_kD_7_temp))
-            self.coloring_kD_8.append((iter, coloring_kD_8_temp))
-            self.coloring_kC_0.append((iter, coloring_kC_0_temp))
-            self.coloring_kC_1.append((iter, coloring_kC_1_temp))
-            self.coloring_kC_2.append((iter, coloring_kC_2_temp))
-            self.coloring_kC_3.append((iter, coloring_kC_3_temp))
-            self.coloring_kC_4.append((iter, coloring_kC_4_temp))
-            self.coloring_kC_5.append((iter, coloring_kC_5_temp))
-            self.coloring_kC_6.append((iter, coloring_kC_6_temp))
-            self.coloring_kC_7.append((iter, coloring_kC_7_temp))
-            self.coloring_kC_8.append((iter, coloring_kC_8_temp))
-            self.coloring_kDC_0.append((iter, coloring_kDC_0_temp))
-            self.coloring_kDC_1.append((iter, coloring_kDC_1_temp))
-            self.coloring_kDC_2.append((iter, coloring_kDC_2_temp))
-            self.coloring_kDC_3.append((iter, coloring_kDC_3_temp))
-            self.coloring_kDC_4.append((iter, coloring_kDC_4_temp))
-            self.coloring_kDC_5.append((iter, coloring_kDC_5_temp))
-            self.coloring_kDC_6.append((iter, coloring_kDC_6_temp))
-            self.coloring_kDC_7.append((iter, coloring_kDC_7_temp))
-            self.coloring_kDC_8.append((iter, coloring_kDC_8_temp))
-            self.coloring_actions.append((iter, coloring_actions_temp))
+            self.coloring_state.append(coloring_state_temp)
+            self.coloring_allC.append(coloring_allC_temp)
+            self.coloring_allD.append(coloring_allD_temp)
+            self.coloring_kD.append(coloring_kD_temp)
+            self.coloring_kC.append(coloring_kC_temp)
+            self.coloring_kDC.append(coloring_kDC_temp)
+            self.coloring_kD_0.append(coloring_kD_0_temp)
+            self.coloring_kD_1.append(coloring_kD_1_temp)
+            self.coloring_kD_2.append(coloring_kD_2_temp)
+            self.coloring_kD_3.append(coloring_kD_3_temp)
+            self.coloring_kD_4.append( coloring_kD_4_temp)
+            self.coloring_kD_5.append(coloring_kD_5_temp)
+            self.coloring_kD_6.append(coloring_kD_6_temp)
+            self.coloring_kD_7.append(coloring_kD_7_temp)
+            self.coloring_kD_8.append(coloring_kD_8_temp)
+            self.coloring_kC_0.append(coloring_kC_0_temp)
+            self.coloring_kC_1.append(coloring_kC_1_temp)
+            self.coloring_kC_2.append(coloring_kC_2_temp)
+            self.coloring_kC_3.append(coloring_kC_3_temp)
+            self.coloring_kC_4.append(coloring_kC_4_temp)
+            self.coloring_kC_5.append(coloring_kC_5_temp)
+            self.coloring_kC_6.append(coloring_kC_6_temp)
+            self.coloring_kC_7.append(coloring_kC_7_temp)
+            self.coloring_kC_8.append(coloring_kC_8_temp)
+            self.coloring_kDC_0.append(coloring_kDC_0_temp)
+            self.coloring_kDC_1.append(coloring_kDC_1_temp)
+            self.coloring_kDC_2.append(coloring_kDC_2_temp)
+            self.coloring_kDC_3.append(coloring_kDC_3_temp)
+            self.coloring_kDC_4.append(coloring_kDC_4_temp)
+            self.coloring_kDC_5.append(coloring_kDC_5_temp)
+            self.coloring_kDC_6.append(coloring_kDC_6_temp)
+            self.coloring_kDC_7.append(coloring_kDC_7_temp)
+            self.coloring_kDC_8.append(coloring_kDC_8_temp)
+            self.coloring_actions.append(coloring_actions_temp)
 
 
     def setData(self):
@@ -316,227 +388,115 @@ class MainWindow(QMainWindow):
     def state_color_handler(self):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
-        selected = []
         iter = self.ui.spinBox_iters.value()
-        k, cells = self.automata.cells[iter]
+
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255, 255, 255, 255))
-                if cells[i, j].state == 1:
-                    selected.append((i, j))
-        self.changeCellsColor(selected, 255, 100, 0)
+
+        self.changeCellsColor(self.coloring_state[iter], 255, 100, 0)
         self.visualization_mode = 0
         
         
     def strategies_color_handler(self):
-        if self.isAnimationRunning == True:
-            self.animation.extendSleepTime()
+        # if self.isAnimationRunning == True:
+        #     self.animation.extendSleepTime()
             
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
-        selected_all_C = []
-        selected_all_D = []
-        selected_kD = []
-        selected_kC = []
-        selected_kDC = []
         iter = self.ui.spinBox_iters.value()
-        k, cells = self.automata.cells[iter]
+
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255, 255, 255, 255))
-                # all D
-                if cells[i, j].strategy == 0:
-                    selected_all_D.append((i, j))
-                # all C
-                elif cells[i, j].strategy == 1:
-                    selected_all_C.append((i, j))
-                # kD
-                elif cells[i, j].strategy == 2:
-                    selected_kD.append((i, j))
-                # kC
-                elif cells[i, j].strategy == 3:
-                    selected_kC.append((i, j))
-                # kDC
-                elif cells[i, j].strategy == 4:
-                    selected_kDC.append((i, j))
         
-        self.changeCellsColor(selected_all_C, 255, 100, 0) # red
-        self.changeCellsColor(selected_all_D, 0, 0, 255) # blue
-        self.changeCellsColor(selected_kD, 0, 128, 0) # green
-        self.changeCellsColor(selected_kC, 0, 255, 255) # cyan
-        self.changeCellsColor(selected_kDC, 255, 20, 147) # pink
+        self.changeCellsColor(self.coloring_allC[iter], 255, 100, 0)  # red
+        self.changeCellsColor(self.coloring_allD[iter], 0, 0, 255)  # blue
+        self.changeCellsColor(self.coloring_kD[iter], 0, 128, 0)  # green
+        self.changeCellsColor(self.coloring_kC[iter], 0, 255, 255)  # cyan
+        self.changeCellsColor(self.coloring_kDC[iter], 255, 20, 147)  # pink
         self.visualization_mode = 1
 
     def kD_strategies_color_handler(self):
-        if self.isAnimationRunning == True:
-            self.animation.extendSleepTime()
+        # if self.isAnimationRunning == True:
+        #     self.animation.extendSleepTime()
 
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
-        selected_k_0 = []
-        selected_k_1 = []
-        selected_k_2 = []
-        selected_k_3 = []
-        selected_k_4 = []
-        selected_k_5 = []
-        selected_k_6 = []
-        selected_k_7 = []
-        selected_k_8 = []
         iter = self.ui.spinBox_iters.value()
-        k, cells = self.automata.cells[iter]
+
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 255))
-                if cells[i, j].strategy == 2:
-                    if cells[i, j].k == 0:
-                        selected_k_0.append((i, j))
-                    elif cells[i, j].k == 1:
-                        selected_k_1.append((i, j))
-                    elif cells[i, j].k == 2:
-                        selected_k_2.append((i, j))
-                    elif cells[i, j].k == 3:
-                        selected_k_3.append((i, j))
-                    elif cells[i, j].k == 4:
-                        selected_k_4.append((i, j))
-                    elif cells[i, j].k == 5:
-                        selected_k_5.append((i, j))
-                    elif cells[i, j].k == 6:
-                        selected_k_6.append((i, j))
-                    elif cells[i, j].k == 7:
-                        selected_k_7.append((i, j))
-                    elif cells[i, j].k == 8:
-                        selected_k_8.append((i, j))
 
-
-        self.changeCellsColor(selected_k_0, 0, 128, 0, 0)
-        self.changeCellsColor(selected_k_1, 0, 128, 0, 31)
-        self.changeCellsColor(selected_k_2, 0, 128, 0, 62)
-        self.changeCellsColor(selected_k_3, 0, 128, 0, 93)
-        self.changeCellsColor(selected_k_4, 0, 128, 0, 124)
-        self.changeCellsColor(selected_k_5, 0, 128, 0, 156)
-        self.changeCellsColor(selected_k_6, 0, 128, 0, 187)
-        self.changeCellsColor(selected_k_7, 0, 128, 0, 218)
-        self.changeCellsColor(selected_k_8, 0, 128, 0, 255)
+        self.changeCellsColor(self.coloring_kD_0[iter], 0, 128, 0, 0)
+        self.changeCellsColor(self.coloring_kD_1[iter], 0, 128, 0, 31)
+        self.changeCellsColor(self.coloring_kD_2[iter], 0, 128, 0, 62)
+        self.changeCellsColor(self.coloring_kD_3[iter], 0, 128, 0, 93)
+        self.changeCellsColor(self.coloring_kD_4[iter], 0, 128, 0, 124)
+        self.changeCellsColor(self.coloring_kD_5[iter], 0, 128, 0, 156)
+        self.changeCellsColor(self.coloring_kD_6[iter], 0, 128, 0, 187)
+        self.changeCellsColor(self.coloring_kD_7[iter], 0, 128, 0, 218)
+        self.changeCellsColor(self.coloring_kD_8[iter], 0, 128, 0, 255)
 
         self.visualization_mode = 2
 
     def kC_strategies_color_handler(self):
-        if self.isAnimationRunning == True:
-            self.animation.extendSleepTime()
+        # if self.isAnimationRunning == True:
+        #     self.animation.extendSleepTime()
         
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
-        selected_k_0 = []
-        selected_k_1 = []
-        selected_k_2 = []
-        selected_k_3 = []
-        selected_k_4 = []
-        selected_k_5 = []
-        selected_k_6 = []
-        selected_k_7 = []
-        selected_k_8 = []
         iter = self.ui.spinBox_iters.value()
-        k, cells = self.automata.cells[iter]
+
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 200))
-                if cells[i, j].strategy == 3:
-                    if cells[i, j].k == 0:
-                        selected_k_0.append((i, j))
-                    elif cells[i, j].k == 1:
-                        selected_k_1.append((i, j))
-                    elif cells[i, j].k == 2:
-                        selected_k_2.append((i, j))
-                    elif cells[i, j].k == 3:
-                        selected_k_3.append((i, j))
-                    elif cells[i, j].k == 4:
-                        selected_k_4.append((i, j))
-                    elif cells[i, j].k == 5:
-                        selected_k_5.append((i, j))
-                    elif cells[i, j].k == 6:
-                        selected_k_6.append((i, j))
-                    elif cells[i, j].k == 7:
-                        selected_k_7.append((i, j))
-                    elif cells[i, j].k == 8:
-                        selected_k_8.append((i, j))
 
-        self.changeCellsColor(selected_k_0, 0, 255, 255, 0)
-        self.changeCellsColor(selected_k_1, 0, 255, 255, 31)
-        self.changeCellsColor(selected_k_2, 0, 255, 255, 62)
-        self.changeCellsColor(selected_k_3, 0, 255, 255, 93)
-        self.changeCellsColor(selected_k_4, 0, 255, 255, 124)
-        self.changeCellsColor(selected_k_5, 0, 255, 255, 156)
-        self.changeCellsColor(selected_k_6, 0, 255, 255, 187)
-        self.changeCellsColor(selected_k_7, 0, 255, 255, 218)
-        self.changeCellsColor(selected_k_8, 0, 255, 255, 255)
+        self.changeCellsColor(self.coloring_kC_0[iter], 0, 255, 255, 0)
+        self.changeCellsColor(self.coloring_kC_1[iter], 0, 255, 255, 31)
+        self.changeCellsColor(self.coloring_kC_2[iter], 0, 255, 255, 62)
+        self.changeCellsColor(self.coloring_kC_3[iter], 0, 255, 255, 93)
+        self.changeCellsColor(self.coloring_kC_4[iter], 0, 255, 255, 124)
+        self.changeCellsColor(self.coloring_kC_5[iter], 0, 255, 255, 156)
+        self.changeCellsColor(self.coloring_kC_6[iter], 0, 255, 255, 187)
+        self.changeCellsColor(self.coloring_kC_7[iter], 0, 255, 255, 218)
+        self.changeCellsColor(self.coloring_kC_8[iter], 0, 255, 255, 255)
 
         self.visualization_mode = 3
 
     def kDC_strategies_color_handler(self):
-        if self.isAnimationRunning == True:
-            self.animation.extendSleepTime()
+        # if self.isAnimationRunning == True:
+        #     self.animation.extendSleepTime()
 
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
-        selected_k_0 = []
-        selected_k_1 = []
-        selected_k_2 = []
-        selected_k_3 = []
-        selected_k_4 = []
-        selected_k_5 = []
-        selected_k_6 = []
-        selected_k_7 = []
-        selected_k_8 = []
         iter = self.ui.spinBox_iters.value()
-        k, cells = self.automata.cells[iter]
+
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 0, 200))
-                if cells[i, j].strategy == 4:
-                    if cells[i, j].k == 0:
-                        selected_k_0.append((i, j))
-                    elif cells[i, j].k == 1:
-                        selected_k_1.append((i, j))
-                    elif cells[i, j].k == 2:
-                        selected_k_2.append((i, j))
-                    elif cells[i, j].k == 3:
-                        selected_k_3.append((i, j))
-                    elif cells[i, j].k == 4:
-                        selected_k_4.append((i, j))
-                    elif cells[i, j].k == 5:
-                        selected_k_5.append((i, j))
-                    elif cells[i, j].k == 6:
-                        selected_k_6.append((i, j))
-                    elif cells[i, j].k == 7:
-                        selected_k_7.append((i, j))
-                    elif cells[i, j].k == 8:
-                        selected_k_8.append((i, j))
 
-        self.changeCellsColor(selected_k_0, 255, 20, 147, 0)
-        self.changeCellsColor(selected_k_1, 255, 20, 147, 31)
-        self.changeCellsColor(selected_k_2, 255, 20, 147, 62)
-        self.changeCellsColor(selected_k_3, 255, 20, 147, 93)
-        self.changeCellsColor(selected_k_4, 255, 20, 147, 124)
-        self.changeCellsColor(selected_k_5, 255, 20, 147, 156)
-        self.changeCellsColor(selected_k_6, 255, 20, 147, 187)
-        self.changeCellsColor(selected_k_7, 255, 20, 147, 218)
-        self.changeCellsColor(selected_k_8, 255, 20, 147, 255)
+        self.changeCellsColor(self.coloring_kDC_0[iter], 255, 20, 147, 0)
+        self.changeCellsColor(self.coloring_kDC_1[iter], 255, 20, 147, 31)
+        self.changeCellsColor(self.coloring_kDC_2[iter], 255, 20, 147, 62)
+        self.changeCellsColor(self.coloring_kDC_3[iter], 255, 20, 147, 93)
+        self.changeCellsColor(self.coloring_kDC_4[iter], 255, 20, 147, 124)
+        self.changeCellsColor(self.coloring_kDC_5[iter], 255, 20, 147, 156)
+        self.changeCellsColor(self.coloring_kDC_6[iter], 255, 20, 147, 187)
+        self.changeCellsColor(self.coloring_kDC_7[iter], 255, 20, 147, 218)
+        self.changeCellsColor(self.coloring_kDC_8[iter], 255, 20, 147, 255)
 
         self.visualization_mode = 4
 
     def action_color_handler(self):
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
-        selected = []
         iter = self.ui.spinBox_iters.value()
-        k, cells = self.automata.cells[iter]
-
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 255, 255))
-                if cells[i, j].action == 1:
-                    selected.append((i, j))
-        self.changeCellsColor(selected, 255, 100, 0)
+        self.changeCellsColor(self.coloring_actions[iter], 255, 100, 0)
         self.visualization_mode = 5
         
 
@@ -625,9 +585,8 @@ class MainWindow(QMainWindow):
             self.animation = Animation(self, 0, numOfIters, secSleepTime)
             self.threadpool.start(self.animation)
 
-    # animation starts here
     def start_animation(self):
         iter = self.ui.spinBox_iters.value()
         self.ui.spinBox_iters.setValue(iter + 1)
         self.ui.graphicsView_CA.repaint()
-        
+

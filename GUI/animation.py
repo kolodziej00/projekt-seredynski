@@ -9,10 +9,10 @@ class Animation(QRunnable):
          self.iter = iter
          self.numofIters = numOfIters
          if sleepTime > 0.3:
-            self.sleepTime = sleepTime
+            self.sleepTime = 0.3
             self.extendedSleepTime = 1.3 * sleepTime
          else:
-             self.sleepTime = 0.3
+             self.sleepTime = 0.1
              self.extendedSleepTime = 0.4
          self.isPaused = False
          self.isRunning = True
@@ -29,6 +29,7 @@ class Animation(QRunnable):
          self.mainWindow.enableStartButton()
          self.isRunning = False
          print("Thread done")
+         self.mainWindow.isAnimationRunning = False
 
       def extendSleepTime(self):
           self.sleepTime = self.extendedSleepTime
