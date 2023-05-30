@@ -105,7 +105,132 @@ class MainWindow(QMainWindow):
         self.ui.graphicsView_CA.setGeometry(QRect(490, 80, width, height))
         self.ui.graphicsView_CA.horizontalHeader().setDefaultSectionSize(cellWidth)
         self.ui.graphicsView_CA.verticalHeader().setDefaultSectionSize(cellHeight)
-             
+
+        self.create_coloring()
+
+
+
+    def create_coloring(self):
+        self.coloring_state = []
+        self.coloring_allC = []
+        self.coloring_allD = []
+        self.coloring_kD = []
+        self.coloring_kC = []
+        self.coloring_kDC = []
+
+        self.coloring_kD_0 = []
+        self.coloring_kD_1 = []
+        self.coloring_kD_2 = []
+        self.coloring_kD_3 = []
+        self.coloring_kD_4 = []
+        self.coloring_kD_5 = []
+        self.coloring_kD_6 = []
+        self.coloring_kD_7 = []
+        self.coloring_kD_8 = []
+
+        self.coloring_kC_0 = []
+        self.coloring_kC_1 = []
+        self.coloring_kC_2 = []
+        self.coloring_kC_3 = []
+        self.coloring_kC_4 = []
+        self.coloring_kC_5 = []
+        self.coloring_kC_6 = []
+        self.coloring_kC_7 = []
+        self.coloring_kC_8 = []
+
+        self.coloring_kDC_0 = []
+        self.coloring_kDC_1 = []
+        self.coloring_kDC_2 = []
+        self.coloring_kDC_3 = []
+        self.coloring_kDC_4 = []
+        self.coloring_kDC_5 = []
+        self.coloring_kDC_6 = []
+        self.coloring_kDC_7 = []
+        self.coloring_kDC_8 = []
+        self.coloring_actions = []
+
+        rows = self.data.canvas.rows
+        cols = self.data.canvas.cols
+
+        for iter, cells in self.automata.cells:
+
+            coloring_state_temp = []
+            coloring_allD_temp = []
+            coloring_allC_temp = []
+            coloring_kD_temp = []
+            coloring_kC_temp = []
+            coloring_kDC_temp = []
+            coloring_kD_0_temp = []
+            coloring_kD_1_temp = []
+            coloring_kD_2_temp = []
+            coloring_kD_3_temp = []
+            coloring_kD_4_temp = []
+            coloring_kD_5_temp = []
+            coloring_kD_6_temp = []
+            coloring_kD_7_temp = []
+            coloring_kD_8_temp = []
+            coloring_kC_0_temp = []
+            coloring_kC_1_temp = []
+            coloring_kC_2_temp = []
+            coloring_kC_3_temp = []
+            coloring_kC_4_temp = []
+            coloring_kC_5_temp = []
+            coloring_kC_6_temp = []
+            coloring_kC_7_temp = []
+            coloring_kC_8_temp = []
+            coloring_kDC_0_temp = []
+            coloring_kDC_1_temp = []
+            coloring_kDC_2_temp = []
+            coloring_kDC_3_temp = []
+            coloring_kDC_4_temp = []
+            coloring_kDC_5_temp = []
+            coloring_kDC_6_temp = []
+            coloring_kDC_7_temp = []
+            coloring_kDC_8_temp = []
+            coloring_actions_temp = []
+            for i in range(rows):
+                for j in range(cols):
+                    # state coloring
+                    if cells[i, j].state == 1:
+
+
+
+
+            self.coloring_state.append((iter, coloring_state_temp))
+            self.coloring_allC.append((iter, coloring_allC_temp))
+            self.coloring_allD.append((iter, coloring_allD_temp))
+            self.coloring_kD.append((iter, coloring_kD_temp))
+            self.coloring_kC.append((iter, coloring_kC_temp))
+            self.coloring_kDC.append((iter, coloring_kDC_temp))
+            self.coloring_kD_0.append((iter, coloring_kD_0_temp))
+            self.coloring_kD_1.append((iter, coloring_kD_1_temp))
+            self.coloring_kD_2.append((iter, coloring_kD_2_temp))
+            self.coloring_kD_3.append((iter, coloring_kD_3_temp))
+            self.coloring_kD_4.append((iter, coloring_kD_4_temp))
+            self.coloring_kD_5.append((iter, coloring_kD_5_temp))
+            self.coloring_kD_6.append((iter, coloring_kD_6_temp))
+            self.coloring_kD_7.append((iter, coloring_kD_7_temp))
+            self.coloring_kD_8.append((iter, coloring_kD_8_temp))
+            self.coloring_kC_0.append((iter, coloring_kC_0_temp))
+            self.coloring_kC_1.append((iter, coloring_kC_1_temp))
+            self.coloring_kC_2.append((iter, coloring_kC_2_temp))
+            self.coloring_kC_3.append((iter, coloring_kC_3_temp))
+            self.coloring_kC_4.append((iter, coloring_kC_4_temp))
+            self.coloring_kC_5.append((iter, coloring_kC_5_temp))
+            self.coloring_kC_6.append((iter, coloring_kC_6_temp))
+            self.coloring_kC_7.append((iter, coloring_kC_7_temp))
+            self.coloring_kC_8.append((iter, coloring_kC_8_temp))
+            self.coloring_kDC_0.append((iter, coloring_kDC_0_temp))
+            self.coloring_kDC_1.append((iter, coloring_kDC_1_temp))
+            self.coloring_kDC_2.append((iter, coloring_kDC_2_temp))
+            self.coloring_kDC_3.append((iter, coloring_kDC_3_temp))
+            self.coloring_kDC_4.append((iter, coloring_kDC_4_temp))
+            self.coloring_kDC_5.append((iter, coloring_kDC_5_temp))
+            self.coloring_kDC_6.append((iter, coloring_kDC_6_temp))
+            self.coloring_kDC_7.append((iter, coloring_kDC_7_temp))
+            self.coloring_kDC_8.append((iter, coloring_kDC_8_temp))
+            self.coloring_actions.append((iter, coloring_actions_temp))
+
 
     def setData(self):
         self.data = MyData(self.canvas, self.competition, self.debugger,
