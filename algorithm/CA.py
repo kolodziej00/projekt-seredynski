@@ -52,6 +52,10 @@ class CA:
         self.p_neigh_0_mut = p_0_neigh_mut
         self.p_neigh_1_mut = p_1_neigh_mut
 
+        # min K, max K
+        self.minK = minK
+        self.maxK = maxK
+
         # save cells as a list o tuples (num_of_iter, numpy array of Cell instances)
         self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
         self.evolution()
@@ -122,13 +126,14 @@ class CA:
                 for j in range(1, self.N_cols - 1):
                     cells[i, j].action = self.decide_action(cells, i, j)
                     # decide whether cell will be changing strategy in this iteration with synch_prob probability
+                    # TODO: should determine changing states not strategy
                     self.is_cell_changing_strategy(cells[i, j])
 
             # calculate payoffs
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     self.calculate_payoff(cells, i, j)
-                    sum_payoff_temp += cells[i, j].sum_payoff
+                    sum_payoff_temp += cells[i, j].avg_payoff
             self.avg_payoff.append((k, sum_payoff_temp / cells.size))
 
             # copy cells to new array to change strategies and states
@@ -139,8 +144,10 @@ class CA:
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     if cells_temp[i, j].change_strategy:
-                        self.tournament_competition(cells, cells_temp, i, j)
-                    # TODO: roulette competition
+                        if self.is_tournament:
+                            self.tournament_competition(cells, cells_temp, i, j)
+                        else:
+                            self.roulette_competition(cells, cells_temp, i, j)
 
                     # strategy mutation with p_strat_mut probability
                     if self.p_strat_mut != 0:
@@ -196,9 +203,19 @@ class CA:
     # mutation of strategy - for now simple random choice
     def mutate_strat(self, cell):
         x = random.randint(0, 4)
-        cell.strategy = x
-        x = random.randint(0, 8)
-        cell.k = x
+        if cell.strategy == 0:
+            cell.strategy = 1
+        elif cell.strategy == 1:
+            cell.strategy = 0
+        else:
+            if self.minK == self.maxK:
+                return
+            if cell.k == self.minK:
+                cell.k += 1
+            elif cell.k == self.maxK:
+                cell.k -= 1
+            else:
+                cell.k = random.choice((cell.k - 1, cell.k + 1))
 
     def update_cell_states(self, cells, cells_temp, i, j):
         # all D
@@ -257,20 +274,27 @@ class CA:
             cells_temp[i, j].strategy = cells[k, n].strategy
             cells_temp[i, j].k = cells[k, n].k
     # roulette competition - neighbour with the highest payoff has the highest probability to win
-    # def roulette_competition(self, cells, cells_temp, i, j):
-    #     payoffs = []
-    #     sum_of_payoffs = 0
-    #     for k in range(i - 1, i + 2):
-    #         for n in range(j - 1, j + 2):
-    #             payoffs.append((k, n, cells[k, n].sum_payoff))
-    #             sum_of_payoffs += cells[k, n].sum_payoff
-    #     probabilities = [payoff/sum_of_payoffs for k, n, payoff in payoffs]
-    #     probabilities_standarized = []
-    #     sum_probabilities = 0
-    #     for probability in probabilities:
-    #         sum_probabilities += probability
-    #         probabilities_standarized.append(sum_o)
-    #     x = random.random()
+    def roulette_competition(self, cells, cells_temp, i, j):
+        payoffs = []
+        sum_of_payoffs = 0
+        for k in range(i - 1, i + 2):
+            for n in range(j - 1, j + 2):
+                payoffs.append((k, n, cells[k, n].sum_payoff))
+                sum_of_payoffs += cells[k, n].sum_payoff
+        probabilities = [(k, n, payoff/sum_of_payoffs) for k, n, payoff in payoffs]
+        probabilities_standardized = []
+        sum_probabilities = 0
+        for k, n, probability in probabilities:
+            sum_probabilities += probability
+            probabilities_standardized.append((k, n, sum_probabilities))
+        x = random.random()
+        for k, n, probability in probabilities_standardized:
+            if x <= probability:
+                cells_temp[i, j].strategy = cells[k, n].strategy
+                cells_temp[i, j].k = cells[k, n].k
+                break;
+
+
 
 
     def calculate_payoff(self, cells, i , j):
