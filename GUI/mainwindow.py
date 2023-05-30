@@ -539,12 +539,12 @@ class MainWindow(QMainWindow):
                 self.createTableCA()
             f.write("\n\n\n#Experiment: " + str(i))
             f.write("\n\n#seed: " + str(self.automata.seed) + "")
-            f.write("\n#iter         f_C          f_C_corr        av_sum      f_allC      f_allD")
-            f.write("        f_kD        f_kC        f_kDC       f_strat_ch      f_0D        f_1D")
-            f.write("        f_2D        f_3D        f_4D        f_5D        f_6D        f_7D        f_8D")
-            f.write("        f_0C        f_1C        f_2C        f_3C        f_4C        f_5C        f_6C")
-            f.write("        f_7C        f_8C        f_0DC       f_1DC       f_2DC       f_3DC       f_4DC")
-            f.write("        f_5DC       f_6DC       f_7DC       f_8DC\n")
+            f.write("\n{0:10}{1:13}{2:18}{3:16}{4:16}{5:16}".format("#iter", "f_C", "f_C_corr", "av_sum", "f_allC", "f_allD"))
+            f.write("{0:14}{1:14}{2:15}{3:20}{4:14}{5:14}".format("f_kD", "f_kC", "f_kDC", "f_strat_ch", "f_0D", "f_1D"))
+            f.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_2D", "f_3D", "f_4D", "f_5D", "f_6D", "f_7D", "f_8D"))
+            f.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_0C", "f_1C", "f_2C", "f_3C", "f_4C", "f_5C", "f_6C" ))
+            f.write("{0:14}{1:14}{2:15}{3:15}{4:15}{5:15}{6:15}".format("f_7C", "f_8C", "f_0DC", "f_1DC", "f_2DC", "f_3DC", "f_4DC" ))
+            f.write("{0:15}{1:15}{2:15}{3:15}\n".format("f_5DC", "f_6DC", "f_7DC", "f_8DC"))
             for statistics in self.automata.statistics:
                 statistics.write_stats_to_file(f)
 

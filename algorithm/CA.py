@@ -486,6 +486,8 @@ class CA:
                         elif cells[i, j].k == 8:
                             num_of_8DC += 1
 
+
+                    # TODO: correct change_strategy stat
                     # this is wrong - even if change_strategy it doesn't mean that cell changed strat...
                     if cells[i, j].change_strategy == True:
                         num_of_strat_change += 1
