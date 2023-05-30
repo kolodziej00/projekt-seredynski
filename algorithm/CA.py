@@ -11,9 +11,6 @@ from algorithm.Statistics import Statistics
 import sys
 import copy
 
-
-
-
 class CA:
     def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, num_of_iter,
                  payoff_C_C, payoff_C_D, payoff_D_C, payoff_D_D, is_sharing, synch_prob,
@@ -126,7 +123,6 @@ class CA:
                 for j in range(1, self.N_cols - 1):
                     cells[i, j].action = self.decide_action(cells, i, j)
                     # decide whether cell will be changing strategy in this iteration with synch_prob probability
-                    # TODO: should determine changing states not strategy
                     self.is_cell_changing_strategy(cells[i, j])
 
             # calculate payoffs
@@ -274,6 +270,7 @@ class CA:
             cells_temp[i, j].strategy = cells[k, n].strategy
             cells_temp[i, j].k = cells[k, n].k
     # roulette competition - neighbour with the highest payoff has the highest probability to win
+
     def roulette_competition(self, cells, cells_temp, i, j):
         payoffs = []
         sum_of_payoffs = 0
@@ -293,8 +290,6 @@ class CA:
                 cells_temp[i, j].strategy = cells[k, n].strategy
                 cells_temp[i, j].k = cells[k, n].k
                 break;
-
-
 
 
     def calculate_payoff(self, cells, i , j):
