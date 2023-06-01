@@ -53,10 +53,12 @@ class CA:
         self.minK = minK
         self.maxK = maxK
 
+        self.change_strat_count = [(0, 0)]
         # save cells as a list o tuples (num_of_iter, numpy array of Cell instances)
         self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
         self.evolution()
         self.statistics = self.calculate_statistics()
+
 
 
     def create_CA(self, p_init_C, allC, allD, kD, kC, minK, maxK):
@@ -117,7 +119,7 @@ class CA:
         for k in range(0, self.num_of_iter - 1):
             sum_payoff_temp = 0
             iter1, cells = self.cells[k]
-
+            change_strat_count = 0
             # decide action and check if cell is in group_of_1s or group_of_0s
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
@@ -150,6 +152,11 @@ class CA:
                         x = random.random()
                         if x <= self.p_strat_mut:
                             self.mutate_strat(cells_temp[i, j])
+                    if cells_temp[i, j].strategy != cells[i, j].strategy:
+                        change_strat_count += 1
+                    else:
+                        if cells[i, j].strategy == 2 or cells[i, j].strategy == 3 or cells[i,j].strategy == 4 and cells[i, j].k != cells_temp[i, j].k:
+                            change_strat_count += 1
 
             # update cell states depending on strategy
             for i in range(1, self.M_rows - 1):
@@ -183,7 +190,7 @@ class CA:
                         x = random.random()
                         if x <= self.p_neigh_1_mut:
                             cells_temp[i, j].state = 0
-
+            self.change_strat_count.append((k + 1, change_strat_count))
             self.cells.append((k + 1, cells_temp))
 
         # not ideal but works...
@@ -487,11 +494,6 @@ class CA:
                             num_of_8DC += 1
 
 
-                    # TODO: correct change_strategy stat
-                    # this is wrong - even if change_strategy it doesn't mean that cell changed strat...
-                    if cells[i, j].change_strategy == True:
-                        num_of_strat_change += 1
-
             # calculate the stats
             f_C = num_of_C / num_of_cells
             f_C_corr = num_of_C_corr / num_of_cells
@@ -501,10 +503,12 @@ class CA:
             f_kD = num_of_kD / num_of_cells
             f_kC = num_of_kC / num_of_cells
             f_kDC = num_of_kDC / num_of_cells
+
+            _, num_of_strat_change = self.change_strat_count[k]
             f_strat_ch = num_of_strat_change / num_of_cells
 
-            # if num_of_kD = 0 then num_of_XD (X = 0, 1...) also = 0, so the division will be = 0
-            # adding 1 just to make it pass
+            # if num_of_kD = 0 then num_of_XD (X = 0, 1...) also = 0, so the division should be = 0
+            # adding 1 to make it so
             if num_of_kD == 0:
                 num_of_kD = 1
             f_0D = num_of_0D / num_of_kD
