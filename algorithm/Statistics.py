@@ -2,7 +2,7 @@ class Statistics:
     def __init__(self, iter, f_C, f_C_corr, av_sum, f_allC, f_allD, f_kD, f_kC,
                  f_kDC, f_strat_ch, f_0D, f_1D, f_2D, f_3D, f_4D, f_5D, f_6D,
                  f_7D, f_8D, f_0C, f_1C, f_2C, f_3C, f_4C, f_5C, f_6C, f_7C, f_8C,
-                 f_0DC, f_1DC, f_2DC, f_3DC, f_4DC, f_5DC, f_6DC, f_7DC, f_8DC):
+                 f_0DC, f_1DC, f_2DC, f_3DC, f_4DC, f_5DC, f_6DC, f_7DC, f_8DC, f_strat_change_final, f_cr_0s, f_cr_1s):
         self.iter = iter
         self.f_C = round(f_C, 4)
         self.f_C_corr = round(f_C_corr, 4)
@@ -40,11 +40,17 @@ class Statistics:
         self.f_6DC = round(f_6DC, 4)
         self.f_7DC = round(f_7DC, 4)
         self.f_8DC = round(f_8DC, 4)
+        self.f_strat_ch_final = round(f_strat_change_final, 4)
+        # cr - counter -_-
+        self.f_cr_0s = round(f_cr_0s, 4)
+        self.f_cr_1s = round(f_cr_1s, 4)
+
 
     def write_stats_to_file(self, f, f2):
         f.write("{0:10}{1:13}{2:18}{3:16}".format(str(self.iter), str(self.f_C), str(self.f_C_corr), str(self.av_sum)))
         f.write("{0:16}{1:16}{2:14}".format(str(self.f_allC), str(self.f_allD), str(self.f_kD)))
-        f.write("{0:14}{1:15}{2:20}\n".format(str(self.f_kC), str(self.f_kDC), str(self.f_strat_ch)))
+        f.write("{0:14}{1:15}{2:20}".format(str(self.f_kC), str(self.f_kDC), str(self.f_strat_ch)))
+        f.write("{0:26}{1:17}{2:17}\n".format(str(self.f_strat_ch_final), str(self.f_cr_0s), str(self.f_cr_1s)))
         f2.write("{0:10}".format(str(self.iter)))
         f2.write("{0:14}{1:14}{2:14}{3:14}{4:14}".format(str(self.f_0D), str(self.f_1D), str(self.f_2D), str(self.f_3D), str(self.f_4D)))
         f2.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_5D), str(self.f_6D), str(self.f_7D), str(self.f_8D)))

@@ -31,7 +31,6 @@ from algorithm.CA import CA
 from GUI.animation import Animation
         
 
-# TODO: Handle many iterations
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -264,9 +263,6 @@ class MainWindow(QMainWindow):
                             coloring_kDC_8_temp.append((i, j))
                     if cells[i, j].action == 1:
                         coloring_actions_temp.append((i, j))
-
-
-
 
             self.coloring_state.append(coloring_state_temp)
             self.coloring_allC.append(coloring_allC_temp)
@@ -580,7 +576,8 @@ class MainWindow(QMainWindow):
             f.write("\n\n\n#Experiment: " + str(i))
             f.write("\n\n#seed: " + str(self.automata.seed) + "")
             f.write("\n{0:10}{1:13}{2:18}{3:16}{4:16}{5:16}".format("#iter", "f_C", "f_C_corr", "av_sum", "f_allC", "f_allD"))
-            f.write("{0:14}{1:14}{2:15}{3:20}\n".format("f_kD", "f_kC", "f_kDC", "f_strat_ch"))
+            f.write("{0:14}{1:14}{2:15}{3:20}{4:26}".format("f_kD", "f_kC", "f_kDC", "f_strat_ch", "f_strat_ch_final"))
+            f.write("{0:17}{1:17}\n".format("f_cr_0s", "f_cr_1s"))
 
             # result-b
             f2.write("\n\n\n#Experiment: " + str(i))

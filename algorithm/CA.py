@@ -53,7 +53,8 @@ class CA:
         self.minK = minK
         self.maxK = maxK
 
-        self.change_strat_count = [(0, 0)]
+        # (iter, f_strat_ch, f_strat_ch_final)
+        self.misc_stats = [(0, 0, 0)]
         # save cells as a list o tuples (num_of_iter, numpy array of Cell instances)
         self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
         self.evolution()
@@ -75,6 +76,15 @@ class CA:
                     strategy, k = self.init_cell_strategy(allC, allD, kD, kC, minK, maxK)
                     CA_cells[i, j] = Cell(_id = id_, x = j, y = i, strategy = strategy, k = k, state = state)
                 id_ += 1
+        for i in range(1, self.M_rows - 1):
+            for j in range(1, self.N_cols - 1):
+                CA_cells[i, j].group_of_1s = self.is_group_of_1s(CA_cells, i, j)
+                if CA_cells[i, j].group_of_1s:
+                    CA_cells[i, j].group_of_0s = False
+                    continue
+                else:
+                    CA_cells[i, j].group_of_0s = self.is_group_of_0s(CA_cells, i, j)
+
         return CA_cells
 
     # initially cell states are assigned randomly with p_init_C probability.
@@ -120,7 +130,8 @@ class CA:
             sum_payoff_temp = 0
             iter1, cells = self.cells[k]
             change_strat_count = 0
-            # decide action and check if cell is in group_of_1s or group_of_0s
+            change_strat_count_final = 0
+            # decide action
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
                     cells[i, j].action = self.decide_action(cells, i, j)
@@ -143,20 +154,24 @@ class CA:
                 for j in range(1, self.N_cols - 1):
                     if cells_temp[i, j].change_strategy:
                         if self.is_tournament:
-                            self.tournament_competition(cells, cells_temp, i, j)
+                           if self.tournament_competition(cells, cells_temp, i, j):
+                               change_strat_count += 1
                         else:
-                            self.roulette_competition(cells, cells_temp, i, j)
+                             if self.roulette_competition(cells, cells_temp, i, j):
+                                 change_strat_count += 1
 
+                    if cells_temp[i, j].strategy != cells[i, j].strategy:
+                        change_strat_count_final += 1
+                    else:
+                        if (cells[i, j].strategy == 2 or cells[i, j].strategy == 3 or cells[i,j].strategy == 4) and cells[i, j].k != cells_temp[i, j].k:
+                            change_strat_count_final += 1
                     # strategy mutation with p_strat_mut probability
                     if self.p_strat_mut != 0:
                         x = random.random()
                         if x <= self.p_strat_mut:
                             self.mutate_strat(cells_temp[i, j])
-                    if cells_temp[i, j].strategy != cells[i, j].strategy:
-                        change_strat_count += 1
-                    else:
-                        if cells[i, j].strategy == 2 or cells[i, j].strategy == 3 or cells[i,j].strategy == 4 and cells[i, j].k != cells_temp[i, j].k:
-                            change_strat_count += 1
+
+
 
             # update cell states depending on strategy
             for i in range(1, self.M_rows - 1):
@@ -190,7 +205,7 @@ class CA:
                         x = random.random()
                         if x <= self.p_neigh_1_mut:
                             cells_temp[i, j].state = 0
-            self.change_strat_count.append((k + 1, change_strat_count))
+            self.misc_stats.append((k + 1, change_strat_count, change_strat_count_final))
             self.cells.append((k + 1, cells_temp))
 
         # not ideal but works...
@@ -276,6 +291,8 @@ class CA:
         if k != i or n != j:
             cells_temp[i, j].strategy = cells[k, n].strategy
             cells_temp[i, j].k = cells[k, n].k
+            return True
+        return False
     # roulette competition - neighbour with the highest payoff has the highest probability to win
 
     def roulette_competition(self, cells, cells_temp, i, j):
@@ -294,9 +311,11 @@ class CA:
         x = random.random()
         for k, n, probability in probabilities_standardized:
             if x <= probability:
-                cells_temp[i, j].strategy = cells[k, n].strategy
-                cells_temp[i, j].k = cells[k, n].k
-                break;
+                if k != i or n != j:
+                    cells_temp[i, j].strategy = cells[k, n].strategy
+                    cells_temp[i, j].k = cells[k, n].k
+                    return True
+                return False
 
 
     def calculate_payoff(self, cells, i , j):
@@ -408,10 +427,10 @@ class CA:
             num_of_kD = 0
             num_of_kC = 0
             num_of_kDC = 0
-            num_of_strat_change = 0
             num_of_0D = num_of_1D = num_of_2D = num_of_3D = num_of_4D = num_of_5D = num_of_6D = num_of_7D = num_of_8D = 0
             num_of_0C = num_of_1C = num_of_2C = num_of_3C = num_of_4C = num_of_5C = num_of_6C = num_of_7C = num_of_8C = 0
             num_of_0DC = num_of_1DC = num_of_2DC = num_of_3DC = num_of_4DC = num_of_5DC = num_of_6DC = num_of_7DC = num_of_8DC = 0
+            num_of_group_0s = num_of_group_1s = 0
 
             for i in range(1, self.M_rows - 1):
                 for j in range(1, self.N_cols - 1):
@@ -492,6 +511,10 @@ class CA:
                             num_of_7DC += 1
                         elif cells[i, j].k == 8:
                             num_of_8DC += 1
+                    if cells[i, j].group_of_1s:
+                        num_of_group_1s += 1
+                    elif cells[i, j].group_of_0s:
+                        num_of_group_0s += 1
 
 
             # calculate the stats
@@ -504,8 +527,11 @@ class CA:
             f_kC = num_of_kC / num_of_cells
             f_kDC = num_of_kDC / num_of_cells
 
-            _, num_of_strat_change = self.change_strat_count[k]
+            _, num_of_strat_change, num_of_strat_change_final = self.misc_stats[k]
             f_strat_ch = num_of_strat_change / num_of_cells
+            f_strat_ch_final = num_of_strat_change_final / num_of_cells
+            f_cr_0s = num_of_group_0s / num_of_cells
+            f_cr_1s = num_of_group_1s / num_of_cells
 
             # if num_of_kD = 0 then num_of_XD (X = 0, 1...) also = 0, so the division should be = 0
             # adding 1 to make it so
@@ -549,6 +575,6 @@ class CA:
             statistics.append((Statistics(k, f_C, f_C_corr, av_sum, f_allC, f_allD, f_kD, f_kC,
                      f_kDC, f_strat_ch, f_0D, f_1D, f_2D, f_3D, f_4D, f_5D, f_6D,
                      f_7D, f_8D, f_0C, f_1C, f_2C, f_3C, f_4C, f_5C, f_6C, f_7C, f_8C,
-                     f_0DC, f_1DC, f_2DC, f_3DC, f_4DC, f_5DC, f_6DC, f_7DC, f_8DC)))
+                     f_0DC, f_1DC, f_2DC, f_3DC, f_4DC, f_5DC, f_6DC, f_7DC, f_8DC, f_strat_ch_final, f_cr_0s, f_cr_1s)))
         return statistics
 
