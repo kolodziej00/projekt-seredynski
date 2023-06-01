@@ -41,20 +41,16 @@ class Statistics:
         self.f_7DC = round(f_7DC, 4)
         self.f_8DC = round(f_8DC, 4)
 
-
-
-
-
-
-    def write_stats_to_file(self, f):
+    def write_stats_to_file(self, f, f2):
         f.write("{0:10}{1:13}{2:18}{3:16}".format(str(self.iter), str(self.f_C), str(self.f_C_corr), str(self.av_sum)))
         f.write("{0:16}{1:16}{2:14}".format(str(self.f_allC), str(self.f_allD), str(self.f_kD)))
-        f.write("{0:14}{1:15}{2:20}{3:14}".format(str(self.f_kC), str(self.f_kDC), str(self.f_strat_ch),  str(self.f_0D)))
-        f.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_1D), str(self.f_2D), str(self.f_3D), str(self.f_4D)))
-        f.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_5D), str(self.f_6D), str(self.f_7D), str(self.f_8D)))
-        f.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_0C), str(self.f_1C), str(self.f_2C), str(self.f_3C)))
-        f.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_4C), str(self.f_5C), str(self.f_6C), str(self.f_7C)))
-        f.write("{0:14}{1:15}{2:15}{3:15}".format(str(self.f_8C), str(self.f_0DC), str(self.f_1DC), str(self.f_2DC)))
-        f.write("{0:15}{1:15}{2:15}{3:15}".format(str(self.f_3DC), str(self.f_4DC), str(self.f_5DC), str(self.f_6DC)))
-        f.write("{0:15}{1:15}\n".format(str(self.f_7DC), str(self.f_8DC)))
+        f.write("{0:14}{1:15}{2:20}\n".format(str(self.f_kC), str(self.f_kDC), str(self.f_strat_ch)))
+        f2.write("{0:10}".format(str(self.iter)))
+        f2.write("{0:14}{1:14}{2:14}{3:14}{4:14}".format(str(self.f_0D), str(self.f_1D), str(self.f_2D), str(self.f_3D), str(self.f_4D)))
+        f2.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_5D), str(self.f_6D), str(self.f_7D), str(self.f_8D)))
+        f2.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_0C), str(self.f_1C), str(self.f_2C), str(self.f_3C)))
+        f2.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_4C), str(self.f_5C), str(self.f_6C), str(self.f_7C)))
+        f2.write("{0:14}{1:15}{2:15}{3:15}".format(str(self.f_8C), str(self.f_0DC), str(self.f_1DC), str(self.f_2DC)))
+        f2.write("{0:15}{1:15}{2:15}{3:15}".format(str(self.f_3DC), str(self.f_4DC), str(self.f_5DC), str(self.f_6DC)))
+        f2.write("{0:15}{1:15}\n".format(str(self.f_7DC), str(self.f_8DC)))
 

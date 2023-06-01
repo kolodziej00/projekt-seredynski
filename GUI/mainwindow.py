@@ -502,7 +502,10 @@ class MainWindow(QMainWindow):
 
 
     def save_results(self):
-        f = open("result.txt", "w")
+        f = open("result-a.txt", "w")
+        f2 = open("result-b.txt", "w")
+
+        # result-a
         f.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
         f.write("\n#num_of_exper: 1" + str(self.data.iterations.num_of_exper))
         f.write("\n#rows: " + str(self.data.canvas.rows))
@@ -516,7 +519,7 @@ class MainWindow(QMainWindow):
             f.write("\n#comp_type: roulette")
         elif(self.data.competition.isTournament):
             f.write("\n#comp_type: tournament")
-        elif():
+        else:
             f.write("\n#comp_type: None?")
 
         f.write("\n#sharing: " + str(self.data.canvas.isSharing))
@@ -533,20 +536,67 @@ class MainWindow(QMainWindow):
         f.write("\n#playerD_opponentD_payoff: " + str(self.data.payoff.a))
         f.write("\n#playerD_opponentC_payoff: " + str(self.data.payoff.b))
         f.write("\n#debug:  " + str(self.data.debugger.isDebug))
+        #########
+
+        # result-b
+
+        f2.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
+        f2.write("\n#num_of_exper: 1" + str(self.data.iterations.num_of_exper))
+        f2.write("\n#rows: " + str(self.data.canvas.rows))
+        f2.write("\n#cols: " + str(self.data.canvas.cols))
+        f2.write("\n#p_init_C: " + str(self.data.canvas.p_init_C))
+        f2.write("\n#p_state_mut: " + str(self.data.mutations.p_state_mut))
+        f2.write("\n#p_strat_mut: " + str(self.data.mutations.p_strat_mut))
+        f2.write("\n#p_0_neighb: " + str(self.data.mutations.p_0_neighb_mut))
+        f2.write("\n#p_1_neighb: " + str(self.data.mutations.p_1_neighb_mut))
+        if(self.data.competition.isRoulette):
+            f2.write("\n#comp_type: roulette")
+        elif(self.data.competition.isTournament):
+            f2.write("\n#comp_type: tournament")
+        else:
+            f2.write("\n#comp_type: None?")
+
+        f2.write("\n#sharing: " + str(self.data.canvas.isSharing))
+        f2.write("\n#allC: " + str(self.data.strategies.all_C))
+        f2.write("\n#allD: " + str(self.data.strategies.all_D))
+        f2.write("\n#kD: " + str(self.data.strategies.k_D))
+        f2.write("\n#kC: " + str(self.data.strategies.k_C))
+        f2.write("\n#kDC: " + str(self.data.strategies.k_DC))
+        f2.write("\n#k_values: " + str(self.data.strategies.k_var_min) + " to " + str(self.data.strategies.k_var_max))
+        f2.write("\n#synchronity_prob: " + str(self.data.synch.synch_prob))
+        f2.write("\n#optimal_num_of_1s: " + str(self.data.synch.optimal_num_1s))
+        f2.write("\n#playerC_opponentD_payoff: " + str(self.data.payoff.c))
+        f2.write("\n#playerC_opponentC_payoff: " + str(self.data.payoff.d))
+        f2.write("\n#playerD_opponentD_payoff: " + str(self.data.payoff.a))
+        f2.write("\n#playerD_opponentC_payoff: " + str(self.data.payoff.b))
+        f2.write("\n#debug:  " + str(self.data.debugger.isDebug))
+
 
         for i in range(self.data.iterations.num_of_exper):
             if i != 0:
                 self.createTableCA()
+
+            # result-a
             f.write("\n\n\n#Experiment: " + str(i))
             f.write("\n\n#seed: " + str(self.automata.seed) + "")
             f.write("\n{0:10}{1:13}{2:18}{3:16}{4:16}{5:16}".format("#iter", "f_C", "f_C_corr", "av_sum", "f_allC", "f_allD"))
-            f.write("{0:14}{1:14}{2:15}{3:20}{4:14}{5:14}".format("f_kD", "f_kC", "f_kDC", "f_strat_ch", "f_0D", "f_1D"))
-            f.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_2D", "f_3D", "f_4D", "f_5D", "f_6D", "f_7D", "f_8D"))
-            f.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_0C", "f_1C", "f_2C", "f_3C", "f_4C", "f_5C", "f_6C" ))
-            f.write("{0:14}{1:14}{2:15}{3:15}{4:15}{5:15}{6:15}".format("f_7C", "f_8C", "f_0DC", "f_1DC", "f_2DC", "f_3DC", "f_4DC" ))
-            f.write("{0:15}{1:15}{2:15}{3:15}\n".format("f_5DC", "f_6DC", "f_7DC", "f_8DC"))
+            f.write("{0:14}{1:14}{2:15}{3:20}\n".format("f_kD", "f_kC", "f_kDC", "f_strat_ch"))
+
+            # result-b
+            f2.write("\n\n\n#Experiment: " + str(i))
+            f2.write("\n\n#seed: " + str(self.automata.seed) + "")
+            f2.write("\n{0:10}{1:14}{2:14}".format("iter", "f_0D", "f_1D"))
+            f2.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_2D", "f_3D", "f_4D", "f_5D", "f_6D", "f_7D",
+                                                                        "f_8D"))
+            f2.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_0C", "f_1C", "f_2C", "f_3C", "f_4C", "f_5C",
+                                                                        "f_6C"))
+            f2.write("{0:14}{1:14}{2:15}{3:15}{4:15}{5:15}{6:15}".format("f_7C", "f_8C", "f_0DC", "f_1DC", "f_2DC", "f_3DC",
+                                                                    "f_4DC"))
+            f2.write("{0:15}{1:15}{2:15}{3:15}\n".format("f_5DC", "f_6DC", "f_7DC", "f_8DC"))
+
+
             for statistics in self.automata.statistics:
-                statistics.write_stats_to_file(f)
+                statistics.write_stats_to_file(f, f2)
 
 
     # update display of CA depending on iteration
