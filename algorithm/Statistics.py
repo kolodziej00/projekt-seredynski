@@ -4,59 +4,59 @@ class Statistics:
                  f_7D, f_8D, f_0C, f_1C, f_2C, f_3C, f_4C, f_5C, f_6C, f_7C, f_8C,
                  f_0DC, f_1DC, f_2DC, f_3DC, f_4DC, f_5DC, f_6DC, f_7DC, f_8DC, f_strat_change_final, f_cr_0s, f_cr_1s):
         self.iter = iter
-        self.f_C = round(f_C, 4)
-        self.f_C_corr = round(f_C_corr, 4)
-        self.av_sum = round(av_sum, 4)
-        self.f_allC = round(f_allC, 4)
-        self.f_allD = round(f_allD, 4)
-        self.f_kD = round(f_kD, 4)
-        self.f_kC = round(f_kC, 4)
-        self.f_kDC = round(f_kDC, 4)
-        self.f_strat_ch = round(f_strat_ch, 4)
-        self.f_0D = round(f_0D, 4)
-        self.f_1D = round(f_1D, 4)
-        self.f_2D = round(f_2D, 4)
-        self.f_3D = round(f_3D, 4)
-        self.f_4D = round(f_4D, 4)
-        self.f_5D = round(f_5D, 4)
-        self.f_6D = round(f_6D, 4)
-        self.f_7D = round(f_7D, 4)
-        self.f_8D = round(f_8D, 4)
-        self.f_0C = round(f_0C, 4)
-        self.f_1C = round(f_1C, 4)
-        self.f_2C = round(f_2C, 4)
-        self.f_3C = round(f_3C, 4)
-        self.f_4C = round(f_4C, 4)
-        self.f_5C = round(f_5C, 4)
-        self.f_6C = round(f_6C, 4)
-        self.f_7C = round(f_7C, 4)
-        self.f_8C = round(f_8C, 4)
-        self.f_0DC = round(f_0DC, 4)
-        self.f_1DC = round(f_1DC, 4)
-        self.f_2DC = round(f_2DC, 4)
-        self.f_3DC = round(f_3DC, 4)
-        self.f_4DC = round(f_4DC, 4)
-        self.f_5DC = round(f_5DC, 4)
-        self.f_6DC = round(f_6DC, 4)
-        self.f_7DC = round(f_7DC, 4)
-        self.f_8DC = round(f_8DC, 4)
-        self.f_strat_ch_final = round(f_strat_change_final, 4)
+        self.f_C = f_C
+        self.f_C_corr = f_C_corr
+        self.av_sum = av_sum
+        self.f_allC = f_allC
+        self.f_allD = f_allD
+        self.f_kD = f_kD
+        self.f_kC = f_kC
+        self.f_kDC = f_kDC
+        self.f_strat_ch = f_strat_ch
+        self.f_0D = f_0D
+        self.f_1D = f_1D
+        self.f_2D = f_2D
+        self.f_3D = f_3D
+        self.f_4D = f_4D
+        self.f_5D = f_5D
+        self.f_6D = f_6D
+        self.f_7D = f_7D
+        self.f_8D = f_8D
+        self.f_0C = f_0C
+        self.f_1C = f_1C
+        self.f_2C = f_2C
+        self.f_3C = f_3C
+        self.f_4C = f_4C
+        self.f_5C = f_5C
+        self.f_6C = f_6C
+        self.f_7C = f_7C
+        self.f_8C = f_8C
+        self.f_0DC = f_0DC
+        self.f_1DC = f_1DC
+        self.f_2DC = f_2DC
+        self.f_3DC = f_3DC
+        self.f_4DC = f_4DC
+        self.f_5DC = f_5DC
+        self.f_6DC = f_6DC
+        self.f_7DC = f_7DC
+        self.f_8DC = f_8DC
+        self.f_strat_ch_final = f_strat_change_final
         # cr - counter -_-
-        self.f_cr_0s = round(f_cr_0s, 4)
-        self.f_cr_1s = round(f_cr_1s, 4)
+        self.f_cr_0s = f_cr_0s
+        self.f_cr_1s = f_cr_1s
 
 
     def write_stats_to_file(self, f, f2):
-        f.write("{0:10}{1:13}{2:18}{3:16}".format(str(self.iter), str(self.f_C), str(self.f_C_corr), str(self.av_sum)))
-        f.write("{0:16}{1:16}{2:14}".format(str(self.f_allC), str(self.f_allD), str(self.f_kD)))
-        f.write("{0:14}{1:15}{2:20}".format(str(self.f_kC), str(self.f_kDC), str(self.f_strat_ch)))
-        f.write("{0:26}{1:17}{2:17}\n".format(str(self.f_strat_ch_final), str(self.f_cr_0s), str(self.f_cr_1s)))
-        f2.write("{0:10}".format(str(self.iter)))
-        f2.write("{0:14}{1:14}{2:14}{3:14}{4:14}".format(str(self.f_0D), str(self.f_1D), str(self.f_2D), str(self.f_3D), str(self.f_4D)))
-        f2.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_5D), str(self.f_6D), str(self.f_7D), str(self.f_8D)))
-        f2.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_0C), str(self.f_1C), str(self.f_2C), str(self.f_3C)))
-        f2.write("{0:14}{1:14}{2:14}{3:14}".format(str(self.f_4C), str(self.f_5C), str(self.f_6C), str(self.f_7C)))
-        f2.write("{0:14}{1:15}{2:15}{3:15}".format(str(self.f_8C), str(self.f_0DC), str(self.f_1DC), str(self.f_2DC)))
-        f2.write("{0:15}{1:15}{2:15}{3:15}".format(str(self.f_3DC), str(self.f_4DC), str(self.f_5DC), str(self.f_6DC)))
-        f2.write("{0:15}{1:15}\n".format(str(self.f_7DC), str(self.f_8DC)))
+        f.write("{0:<10.0f}{1:<13.4f}{2:<18.4f}{3:<16.4f}".format(self.iter, self.f_C, self.f_C_corr, self.av_sum))
+        f.write("{0:<16.4f}{1:<16.4f}{2:<14.4f}".format(self.f_allC, self.f_allD, self.f_kD))
+        f.write("{0:<14.4f}{1:<15.4f}{2:<20.4f}".format(self.f_kC, self.f_kDC,self.f_strat_ch))
+        f.write("{0:<26.4f}{1:<17.4f}{2:<17.4f}\n".format(self.f_strat_ch_final, self.f_cr_0s, self.f_cr_1s))
+        f2.write("{0:<10.0f}".format(self.iter))
+        f2.write("{0:<14.4f}{1:<14.4f}{2:<14.4f}{3:<14.4f}{4:<14.4f}".format(self.f_0D, self.f_1D, self.f_2D, self.f_3D, self.f_4D))
+        f2.write("{0:<14.4f}{1:<14.4f}{2:<14.4f}{3:<14.4f}".format(self.f_5D, self.f_6D, self.f_7D, self.f_8D))
+        f2.write("{0:<14.4f}{1:<14.4f}{2:<14.4f}{3:<14.4f}".format(self.f_0C, self.f_1C, self.f_2C, self.f_3C))
+        f2.write("{0:<14.4f}{1:<14.4f}{2:<14.4f}{3:<14.4f}".format(self.f_4C, self.f_5C, self.f_6C, self.f_7C))
+        f2.write("{0:<14.4f}{1:<15.4f}{2:<15.4f}{3:<15.4f}".format(self.f_8C, self.f_0DC, self.f_1DC, self.f_2DC))
+        f2.write("{0:<15.4f}{1:<15.4f}{2:<15.4f}{3:<15.4f}".format(self.f_3DC, self.f_4DC, self.f_5DC, self.f_6DC))
+        f2.write("{0:<15.4f}{1:<15.4f}\n".format(self.f_7DC, self.f_8DC))
 

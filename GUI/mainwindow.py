@@ -29,6 +29,7 @@ from data.payoff import Payoff
 
 from algorithm.CA import CA
 from GUI.animation import Animation
+from algorithm.StatisticsMultirun import StatisticsMultirun
         
 
 class MainWindow(QMainWindow):
@@ -503,7 +504,7 @@ class MainWindow(QMainWindow):
 
         # result-a
         f.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
-        f.write("\n#num_of_exper: 1" + str(self.data.iterations.num_of_exper))
+        f.write("\n#num_of_exper: " + str(self.data.iterations.num_of_exper))
         f.write("\n#rows: " + str(self.data.canvas.rows))
         f.write("\n#cols: " + str(self.data.canvas.cols))
         f.write("\n#p_init_C: " + str(self.data.canvas.p_init_C))
@@ -535,9 +536,8 @@ class MainWindow(QMainWindow):
         #########
 
         # result-b
-
         f2.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
-        f2.write("\n#num_of_exper: 1" + str(self.data.iterations.num_of_exper))
+        f2.write("\n#num_of_exper: " + str(self.data.iterations.num_of_exper))
         f2.write("\n#rows: " + str(self.data.canvas.rows))
         f2.write("\n#cols: " + str(self.data.canvas.cols))
         f2.write("\n#p_init_C: " + str(self.data.canvas.p_init_C))
@@ -572,6 +572,7 @@ class MainWindow(QMainWindow):
             if i != 0:
                 self.createTableCA()
 
+
             # result-a
             f.write("\n\n\n#Experiment: " + str(i))
             f.write("\n\n#seed: " + str(self.automata.seed) + "")
@@ -584,17 +585,63 @@ class MainWindow(QMainWindow):
             f2.write("\n\n#seed: " + str(self.automata.seed) + "")
             f2.write("\n{0:10}{1:14}{2:14}".format("iter", "f_0D", "f_1D"))
             f2.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_2D", "f_3D", "f_4D", "f_5D", "f_6D", "f_7D",
-                                                                        "f_8D"))
+                                                                         "f_8D"))
             f2.write("{0:14}{1:14}{2:14}{3:14}{4:14}{5:14}{6:14}".format("f_0C", "f_1C", "f_2C", "f_3C", "f_4C", "f_5C",
-                                                                        "f_6C"))
+                                                                         "f_6C"))
             f2.write("{0:14}{1:14}{2:15}{3:15}{4:15}{5:15}{6:15}".format("f_7C", "f_8C", "f_0DC", "f_1DC", "f_2DC", "f_3DC",
-                                                                    "f_4DC"))
+                                                                         "f_4DC"))
             f2.write("{0:15}{1:15}{2:15}{3:15}\n".format("f_5DC", "f_6DC", "f_7DC", "f_8DC"))
 
-
+            stats_multirun_temp = []
+            stats_multirun = []
             for statistics in self.automata.statistics:
                 statistics.write_stats_to_file(f, f2)
+                stats_multirun_temp.append(statistics)
+            stats_multirun.append((i, stats_multirun_temp))
 
+            if 0 < self.data.iterations.num_of_exper - 1 == i:
+                statistics_multirun = StatisticsMultirun(stats_multirun, self.data.iterations.num_of_iter, self.data.iterations.num_of_exper)
+                f3 = open("std-result-a.txt", "w")
+                f3.write("#num_of_iter: " + str(self.data.iterations.num_of_iter))
+                f3.write("\n#num_of_exper: " + str(self.data.iterations.num_of_exper))
+                f3.write("\n#rows: " + str(self.data.canvas.rows))
+                f3.write("\n#cols: " + str(self.data.canvas.cols))
+                f3.write("\n#p_init_C: " + str(self.data.canvas.p_init_C))
+                f3.write("\n#p_state_mut: " + str(self.data.mutations.p_state_mut))
+                f3.write("\n#p_strat_mut: " + str(self.data.mutations.p_strat_mut))
+                f3.write("\n#p_0_neighb: " + str(self.data.mutations.p_0_neighb_mut))
+                f3.write("\n#p_1_neighb: " + str(self.data.mutations.p_1_neighb_mut))
+                if (self.data.competition.isRoulette):
+                    f3.write("\n#comp_type: roulette")
+                elif (self.data.competition.isTournament):
+                    f3.write("\n#comp_type: tournament")
+                else:
+                    f3.write("\n#comp_type: None?")
+
+                f3.write("\n#sharing: " + str(self.data.canvas.isSharing))
+                f3.write("\n#allC: " + str(self.data.strategies.all_C))
+                f3.write("\n#allD: " + str(self.data.strategies.all_D))
+                f3.write("\n#kD: " + str(self.data.strategies.k_D))
+                f3.write("\n#kC: " + str(self.data.strategies.k_C))
+                f3.write("\n#kDC: " + str(self.data.strategies.k_DC))
+                f3.write("\n#k_values: " + str(self.data.strategies.k_var_min) + " to " + str(
+                    self.data.strategies.k_var_max))
+                f3.write("\n#synchronity_prob: " + str(self.data.synch.synch_prob))
+                f3.write("\n#optimal_num_of_1s: " + str(self.data.synch.optimal_num_1s))
+                f3.write("\n#playerC_opponentD_payoff: " + str(self.data.payoff.c))
+                f3.write("\n#playerC_opponentC_payoff: " + str(self.data.payoff.d))
+                f3.write("\n#playerD_opponentD_payoff: " + str(self.data.payoff.a))
+                f3.write("\n#playerD_opponentC_payoff: " + str(self.data.payoff.b))
+                f3.write("\n#debug:  " + str(self.data.debugger.isDebug))
+                f3.write("\n\n{0:10}{1:16}{2:17}{3:20}{4:21}{5:19}".format("#iter", "av_f_C", "std_f_C", "av_f_C_corr", "std_f_C_corr",
+                                                                           "av_av_pay"))
+                f3.write("{0:20}{1:20}{2:21}{3:20}{4:21}".format("std_av_pay", "av_f_cr_0s", "std_f_cr_0s", "av_f_cr_1s", "std_f_cr_1s"))
+                f3.write("{0:19}{1:20}{2:19}{3:20}{4:18}".format("av_f_allC", "std_f_allC", "av_f_allD", "std_f_allD",
+                         "av_f_kD"))
+                f3.write("{0:19}{1:18}{2:19}{3:19}{4:20}".format("std_f_kD", "av_f_kC", "std_f_kC", "av_f_kDC",
+                         "std_f_kDC"))
+                f3.write("{0:23}{1:24}{2:29}{3:30}\n".format("av_f_strat_ch", "std_f_strat_ch", "av_f_strat_ch_final", "std_f_strat_ch_final"))
+                statistics_multirun.write_to_file(f3)
 
     # update display of CA depending on iteration
     # visualization mode defines what type of visualization is chosen (state/strategy)
