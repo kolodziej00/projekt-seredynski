@@ -85,11 +85,12 @@ class MainWindow(QMainWindow):
         else:
             seed = None
         self.automata = CA(rows, cols, self.data.canvas.p_init_C, self.data.strategies.all_C,
-                       self.data.strategies.all_D, self.data.strategies.k_D, self.data.strategies.k_C,
-                       self.data.strategies.k_var_min, self.data.strategies.k_var_max, self.data.iterations.num_of_iter,
-                       self.data.payoff.d, self.data.payoff.c, self.data.payoff.b, self.data.payoff.a, self.canvas.isSharing,
-                       self.data.synch.synch_prob, self.data.competition.isTournament, self.data.mutations.p_state_mut,
-                       self.data.mutations.p_strat_mut, self.data.mutations.p_0_neighb_mut, self.data.mutations.p_1_neighb_mut,
+                           self.data.strategies.all_D, self.data.strategies.k_D, self.data.strategies.k_C,
+                           self.data.strategies.k_var_min, self.data.strategies.k_var_max, self.data.iterations.num_of_iter,
+                           self.data.payoff.d, self.data.payoff.c, self.data.payoff.b, self.data.payoff.a, self.canvas.isSharing,
+                           self.data.synch.synch_prob, self.data.competition.isTournament, self.data.mutations.p_state_mut,
+                           self.data.mutations.p_strat_mut, self.data.mutations.p_0_neighb_mut, self.data.mutations.p_1_neighb_mut,
+                           self.data.debugger.isDebug,
                            seed)
 
         k, cells = self.automata.cells[0]

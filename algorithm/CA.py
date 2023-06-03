@@ -14,7 +14,7 @@ import copy
 class CA:
     def __init__(self, M_rows, N_cols, p_init_C, allC, allD, kD, kC, minK, maxK, num_of_iter,
                  payoff_C_C, payoff_C_D, payoff_D_C, payoff_D_D, is_sharing, synch_prob,
-                 is_tournament, p_state_mut, p_strat_mut, p_0_neigh_mut, p_1_neigh_mut, seed = None):
+                 is_tournament, p_state_mut, p_strat_mut, p_0_neigh_mut, p_1_neigh_mut, is_debug, seed = None):
         # size of CA
         self.M_rows = M_rows
         self.N_cols = N_cols
@@ -37,6 +37,9 @@ class CA:
         # sharing of payoffs
         self.is_sharing = is_sharing
 
+        # debug options
+        self.is_debug = is_debug
+
         # competition type, if true - tournament competition, else roulette competition
         self.is_tournament = is_tournament
 
@@ -56,10 +59,32 @@ class CA:
         # (iter, f_strat_ch, f_strat_ch_final)
         self.misc_stats = [(0, 0, 0)]
         # save cells as a list o tuples (num_of_iter, numpy array of Cell instances)
-        self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
+        if not is_debug:
+            self.cells = [(0, self.create_CA(p_init_C, allC, allD, kD, kC, minK, maxK))]
+        else:
+            self.cells = []
         self.evolution()
         self.statistics = self.calculate_statistics()
 
+    # def create_CA_debug(self):
+    #     # read file to list of strings
+    #     f1 = open("CA_states_deb.txt", "r")
+    #     f2 = open("CA_strat_deb.txt", "r")
+    #     ca_states_lines = f1.readlines()
+    #     ca_strat_lines = f2.readlines()
+    #
+    #     cells = np.empty((self.M_rows, self.N_cols), dtype=object)
+    #     id_ = 0
+    #     for i in range(self.M_rows):
+    #         for j in range(self.N_cols):
+    #             # Cells on borders have predefined static properties.
+    #             if i == 0 or i == self.M_rows - 1 or j == 0 or j == self.N_cols - 1:
+    #                 cells[i, j] = Cell(_id=id_, x=j, y=i, state=0, action=1, strategy=0)
+    #                 continue
+    #             if i < self.M_rows:
+    #
+    #
+    #             id_ += 1
 
 
     def create_CA(self, p_init_C, allC, allD, kD, kC, minK, maxK):
@@ -69,7 +94,7 @@ class CA:
             for j in range(self.N_cols):
                 # Cells on borders have predefined static properties.
                 if i == 0 or i == self.M_rows - 1 or j == 0 or j == self.N_cols - 1:
-                    CA_cells[i, j] = Cell(_id = id_, x =j , y = i, state = 0, action = 1, strategy = 0)
+                    CA_cells[i, j] = Cell(_id=id_, x=j, y=i, state=0, action=1, strategy=0)
                 else:
                 # the rest of cells have randomly assigned states and strategies
                     state = self.init_cell_state( p_init_C)
@@ -163,7 +188,7 @@ class CA:
                     if cells_temp[i, j].strategy != cells[i, j].strategy:
                         change_strat_count_final += 1
                     else:
-                        if (cells[i, j].strategy == 2 or cells[i, j].strategy == 3 or cells[i,j].strategy == 4) and cells[i, j].k != cells_temp[i, j].k:
+                        if (cells[i, j].strategy == 2 or cells[i, j].strategy == 3 or cells[i, j].strategy == 4) and cells[i, j].k != cells_temp[i, j].k:
                             change_strat_count_final += 1
                     # strategy mutation with p_strat_mut probability
                     if self.p_strat_mut != 0:
