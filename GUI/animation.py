@@ -35,7 +35,7 @@ class Animation(QRunnable):
          self.isRunning = False
          print("Thread done")
          self.mainWindow.isAnimationRunning = False
-         self.mutex.endPaint()
+         #self.mutex.endPaint()
 
       def extendSleepTime(self):
           self.sleepTime = self.extendedSleepTime
