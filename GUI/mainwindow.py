@@ -58,12 +58,19 @@ class MainWindow(QMainWindow):
         self.ui.graphicsView_CA.render(pixmap)
         fileName = "Images//image" + str(self.ui.lcdNumber_iters.value()) + str(self.visualization_mode) + ".png"
         pixmap.save(fileName, "PNG", -1)
+        
+
+
 
     def changeCellsColor(self, selected, R, G, B, opacity=255):
+        tasks=[]
         for ix in selected:
             row, column = ix
-            self.ui.graphicsView_CA.item(row, column).setBackground(QColor(R,G,B, opacity))
-                
+            tasks.append(asyncio.to_thread(self.ui.graphicsView_CA.item(row, column).setBackground(QColor(R,G,B, opacity))))
+        try:
+            asyncio.run(asyncio.gather(*tasks) )
+        except:
+            pass
                 
     def roundDivision(self, size, n):
         floor = math.floor(size / n)
@@ -687,5 +694,5 @@ class MainWindow(QMainWindow):
     def start_animation(self):
         iter = self.ui.spinBox_iters.value()
         self.ui.spinBox_iters.setValue(iter + 1)
-        self.ui.graphicsView_CA.repaint()
+        #self.ui.graphicsView_CA.update()
 
