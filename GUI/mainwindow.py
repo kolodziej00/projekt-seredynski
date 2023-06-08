@@ -8,7 +8,7 @@ import datetime
 import math
 import time
 import asyncio
-
+import os
 from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem, QMessageBox)
 from PySide6.QtGui import (QColor, QPixmap)
 from PySide6.QtCore import (QRect, QThreadPool, QMutex)
@@ -56,8 +56,10 @@ class MainWindow(QMainWindow):
     def saveImage(self):
         pixmap = QPixmap(self.ui.graphicsView_CA.size())
         self.ui.graphicsView_CA.render(pixmap)
-        fileName = "Images//image" + str(self.ui.lcdNumber_iters.value()) + str(self.visualization_mode) + ".png"
-        pixmap.save(fileName, "PNG", -1)
+        if not os.path.exists("Images"):
+            os.makedirs("Images")
+        fileName = "Images/image" + str(self.ui.lcdNumber_iters.value()) + str(self.visualization_mode) + ".png"
+        pixmap.save(fileName)
         
 
 
