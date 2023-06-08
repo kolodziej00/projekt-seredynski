@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         if not os.path.exists("Images"):
             os.makedirs("Images")
         fileName = "Images/image" + str(self.ui.lcdNumber_iters.value()) + str(self.visualization_mode) + ".png"
-        pixmap.save(fileName)
+        pixmap.save(fileName,"PNG",-1)
         
 
 
