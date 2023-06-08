@@ -30,7 +30,7 @@ from data.payoff import Payoff
 from algorithm.CA import CA
 from GUI.animation import Animation
 from algorithm.StatisticsMultirun import StatisticsMultirun
-        
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -49,8 +49,8 @@ class MainWindow(QMainWindow):
     def displayDataWarning(self):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
-        msg.setText("Can't process data.\nThe data entered is incorrect.")
-        msg.setWindowTitle("Invalid input")
+        msg.setText("Some necessary data is missing. Check if the form has been filled out correctly.")
+        msg.setWindowTitle("Wrong data")
         msg.exec_()
 
     def saveImage(self):
@@ -110,11 +110,11 @@ class MainWindow(QMainWindow):
                 self.ui.graphicsView_CA.setItem(n, m, cells[n, m])
                 if cells[n, m].state == 1:
                         self.ui.graphicsView_CA.item(n, m).setBackground(QColor(255, 100, 0, 255))
-        cellWidth = self.roundDivision(300, cols)
-        cellHeight = self.roundDivision(300, rows)
+        cellWidth = self.roundDivision(490, cols)
+        cellHeight = self.roundDivision(490, rows)
         width = cellWidth * cols + 2
         height = cellHeight * rows + 2
-        self.ui.graphicsView_CA.setGeometry(QRect(490, 80, width, height))
+        self.ui.graphicsView_CA.setGeometry(QRect(470, 90, width, height))
         self.ui.graphicsView_CA.horizontalHeader().setDefaultSectionSize(cellWidth)
         self.ui.graphicsView_CA.verticalHeader().setDefaultSectionSize(cellHeight)
 
@@ -341,40 +341,40 @@ class MainWindow(QMainWindow):
             self.displayDataWarning()
             return
 
-        self.canvas = Canvas(self.ui.spinBox_Mrows.value(), 
-                                self.ui.spinBox_Ncols.value(), 
+        self.canvas = Canvas(self.ui.spinBox_Mrows.value(),
+                                self.ui.spinBox_Ncols.value(),
                                 self.ui.doubleSpinBox_p_init_C.value(),
                                 self.ui.checkBox_sharing.isChecked())
-        
+
         self.competition = Competition(self.ui.radioButton_roulette.isChecked(),
                                         self.ui.radioButton_tournament.isChecked())
-        
+
         self.debugger = Debugger(self.ui.radioButton_debug.isChecked(),
-                                    self.ui.radioButton_CA_state.isChecked(), 
+                                    self.ui.radioButton_CA_state.isChecked(),
                                     self.ui.radioButton_CA_strat.isChecked(),
                                  self.ui.radioButton_test1.isChecked(), self.ui.radioButton_test2.isChecked(),
                                  self.ui.radioButton_test3.isChecked())
-        
+
         self.iterations = Iterations(self.ui.spinBox_num_of_iter.value(),
                                         self.ui.spinBox_num_of_exper.value())
-        
-        self.mutation = Mutation(self.ui.doubleSpinBox_p_state_mut.value(), 
+
+        self.mutation = Mutation(self.ui.doubleSpinBox_p_state_mut.value(),
                                     self.ui.doubleSpinBox_p_strat_mut.value(),
-                                    self.ui.doubleSpinBox_p_0_neigh_mut.value(), 
+                                    self.ui.doubleSpinBox_p_0_neigh_mut.value(),
                                     self.ui.doubleSpinBox_p_1_neigh_mut.value())
-        
+
         self.seed = Seed(self.ui.radioButton_clock.isChecked(),
-                            self.ui.radioButton_custom.isChecked(), 
+                            self.ui.radioButton_custom.isChecked(),
                             self.ui.spinBox_custom_seed.value())
-        
-        self.synch = Synch(self.ui.doubleSpinBox_synch_prob.value(), 
+
+        self.synch = Synch(self.ui.doubleSpinBox_synch_prob.value(),
                             self.ui.spinBox_optimal_num_1s.value())
-        
-        self.strategies = Strategies(self.ui.doubleSpinBox_allC.value(), 
-                                        self.ui.doubleSpinBox_allD.value(), 
-                                        self.ui.doubleSpinBox_kD.value(), 
-                                        self.ui.doubleSpinBox_kC.value(), 
-                                        self.ui.doubleSpinBox_kDC.value(), 
+
+        self.strategies = Strategies(self.ui.doubleSpinBox_allC.value(),
+                                        self.ui.doubleSpinBox_allD.value(),
+                                        self.ui.doubleSpinBox_kD.value(),
+                                        self.ui.doubleSpinBox_kC.value(),
+                                        self.ui.doubleSpinBox_kDC.value(),
                                         self.ui.spinBox_kMin.value(),
                                         self.ui.spinBox_kMax.value())
 
@@ -385,7 +385,7 @@ class MainWindow(QMainWindow):
         self.ui.spinBox_iters.setMaximum(self.iterations.num_of_iter-1)
         self.visualization_mode = 0  # state visualization
         self.setData()
-        
+
         self.ui.pushButton_states.setDisabled(0)
         self.ui.pushButton_strategies.setDisabled(0)
         self.ui.pushButton_kD.setDisabled(0)
@@ -407,12 +407,12 @@ class MainWindow(QMainWindow):
 
         self.changeCellsColor(self.coloring_state[iter], 255, 100, 0)
         self.visualization_mode = 0
-        
-        
+
+
     def strategies_color_handler(self):
         # if self.isAnimationRunning == True:
         #     self.animation.extendSleepTime()
-            
+
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
         iter = self.ui.spinBox_iters.value()
@@ -420,7 +420,7 @@ class MainWindow(QMainWindow):
         for i in range(rows):
             for j in range(cols):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(255, 255, 255, 255))
-        
+
         self.changeCellsColor(self.coloring_allC[iter], 255, 100, 0)  # red
         self.changeCellsColor(self.coloring_allD[iter], 0, 0, 255)  # blue
         self.changeCellsColor(self.coloring_kD[iter], 0, 128, 0)  # green
@@ -455,7 +455,7 @@ class MainWindow(QMainWindow):
     def kC_strategies_color_handler(self):
         # if self.isAnimationRunning == True:
         #     self.animation.extendSleepTime()
-        
+
         rows = self.data.canvas.rows
         cols = self.data.canvas.cols
         iter = self.ui.spinBox_iters.value()
@@ -509,7 +509,7 @@ class MainWindow(QMainWindow):
                 self.ui.graphicsView_CA.item(i, j).setBackground(QColor(0, 0, 255, 255))
         self.changeCellsColor(self.coloring_actions[iter], 255, 100, 0)
         self.visualization_mode = 5
-        
+
 
 
     def save_results(self):
@@ -674,7 +674,7 @@ class MainWindow(QMainWindow):
             self.action_color_handler()
 
     def enableStartButton(self):
-        self.ui.pushButton_start.setEnabled(True) 
+        self.ui.pushButton_start.setEnabled(True)
 
     def pause_animation(self):
         self.animation.stop()
@@ -697,4 +697,3 @@ class MainWindow(QMainWindow):
         iter = self.ui.spinBox_iters.value()
         self.ui.spinBox_iters.setValue(iter + 1)
         #self.ui.graphicsView_CA.update()
-
