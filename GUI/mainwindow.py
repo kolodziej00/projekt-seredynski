@@ -8,7 +8,7 @@ import datetime
 import math
 import time
 import asyncio
-
+import os
 from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem, QMessageBox)
 from PySide6.QtGui import (QColor, QPixmap)
 from PySide6.QtCore import (QRect, QThreadPool, QMutex)
@@ -56,15 +56,24 @@ class MainWindow(QMainWindow):
     def saveImage(self):
         pixmap = QPixmap(self.ui.graphicsView_CA.size())
         self.ui.graphicsView_CA.render(pixmap)
-        fileName = "Images//image" + str(self.ui.lcdNumber_iters.value()) + str(self.visualization_mode) + ".png"
-        pixmap.save(fileName, "PNG", -1)
+        if not os.path.exists("Images"):
+            os.makedirs("Images")
+        fileName = "Images/image" + str(self.ui.lcdNumber_iters.value()) + str(self.visualization_mode) + ".png"
+        pixmap.save(fileName,"PNG",-1)
+        
+
+
 
     def changeCellsColor(self, selected, R, G, B, opacity=255):
+        tasks=[]
         for ix in selected:
             row, column = ix
-            self.ui.graphicsView_CA.item(row, column).setBackground(QColor(R,G,B, opacity))
-
-
+            tasks.append(asyncio.to_thread(self.ui.graphicsView_CA.item(row, column).setBackground(QColor(R,G,B, opacity))))
+        try:
+            asyncio.run(asyncio.gather(*tasks) )
+        except:
+            pass
+                
     def roundDivision(self, size, n):
         floor = math.floor(size / n)
         roof = math.ceil(size / n)
@@ -384,6 +393,9 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_kDC.setDisabled(0)
         self.ui.pushButton_actions.setDisabled(0)
         self.ui.pushButton_states.setDisabled(0)
+        self.ui.pushButton_start_anim.setDisabled(0)
+        self.ui.pushButton_save.setDisabled(0)
+        self.ui.pushButton_stop.setDisabled(0)
 
         self.save_results()
 
@@ -687,4 +699,4 @@ class MainWindow(QMainWindow):
     def start_animation(self):
         iter = self.ui.spinBox_iters.value()
         self.ui.spinBox_iters.setValue(iter + 1)
-        self.ui.graphicsView_CA.repaint()
+        #self.ui.graphicsView_CA.update()
