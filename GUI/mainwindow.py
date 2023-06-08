@@ -49,8 +49,8 @@ class MainWindow(QMainWindow):
     def displayDataWarning(self):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
-        msg.setText("Can't process data.\nThe data entered is incorrect.")
-        msg.setWindowTitle("Invalid input")
+        msg.setText("Some necessary data is missing. Check if the form has been filled out correctly.")
+        msg.setWindowTitle("Wrong data")
         msg.exec_()
 
     def saveImage(self):
