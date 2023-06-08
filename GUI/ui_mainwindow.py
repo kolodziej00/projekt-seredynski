@@ -74,15 +74,6 @@ class Ui_MainWindow(object):
         self.pushButton_actions.setGeometry(QRect(890, 20, 91, 31))
         self.pushButton_actions.clicked.connect(MainWindow.action_color_handler)
 
-        # disabling buttons before simulation has started
-        self.pushButton_states.setDisabled(1)
-        self.pushButton_strategies.setDisabled(1)
-        self.pushButton_kD.setDisabled(1)
-        self.pushButton_kC.setDisabled(1)
-        self.pushButton_kDC.setDisabled(1)
-        self.pushButton_actions.setDisabled(1)
-        self.pushButton_states.setDisabled(1)
-
         self.groupBox_simul = QGroupBox(self.centralwidget)
         self.groupBox_simul.setObjectName(u"groupBox_simul")
         self.groupBox_simul.setGeometry(QRect(10, 10, 361, 561))
@@ -385,6 +376,7 @@ class Ui_MainWindow(object):
         self.pushButton_start_anim.setGeometry(QRect(680, 590, 91, 31))
         self.pushButton_start_anim.setFont(font)
         self.pushButton_start_anim.clicked.connect(MainWindow.start_animation_thread)
+
         self.spinBox_iters = QSpinBox(self.centralwidget)
         self.spinBox_iters.setObjectName(u"spinBox_iters")
         self.spinBox_iters.setGeometry(QRect(560, 590, 91, 31))
@@ -398,14 +390,19 @@ class Ui_MainWindow(object):
         font2.setBold(False)
         self.label_33.setFont(font2)
         self.label_33.setAlignment(Qt.AlignCenter)
+
         self.pushButton_stop = QPushButton(self.centralwidget)
         self.pushButton_stop.setObjectName(u"pushButton_stop")
         self.pushButton_stop.setGeometry(QRect(770, 590, 91, 31))
         self.pushButton_stop.setFont(font)
+        self.pushButton_stop.clicked.connect(MainWindow.pause_animation)
+
         self.pushButton_save = QPushButton(self.centralwidget)
         self.pushButton_save.setObjectName(u"pushButton_save")
         self.pushButton_save.setGeometry(QRect(860, 590, 91, 31))
         self.pushButton_save.setFont(font)
+        self.pushButton_save.clicked.connect(MainWindow.saveImage)
+
         self.graphicsView_gnuplot = QGraphicsView(self.centralwidget)
         self.graphicsView_gnuplot.setObjectName(u"graphicsView_gnuplot")
         self.graphicsView_gnuplot.setGeometry(QRect(410, 631, 601, 211))
@@ -425,6 +422,21 @@ class Ui_MainWindow(object):
         self.pushButton_start.setFont(font4)
         self.pushButton_start.clicked.connect(MainWindow.startSimulation)
         # self.pushButton_start.clicked.connect(self.zeroSpinBoxIter)
+
+
+            #chuj
+
+        # disabling buttons before simulation has started
+        self.pushButton_states.setDisabled(1)
+        self.pushButton_strategies.setDisabled(1)
+        self.pushButton_kD.setDisabled(1)
+        self.pushButton_kC.setDisabled(1)
+        self.pushButton_kDC.setDisabled(1)
+        self.pushButton_actions.setDisabled(1)
+        self.pushButton_states.setDisabled(1)
+        self.pushButton_start_anim.setDisabled(1)
+        self.pushButton_stop.setDisabled(1)
+        self.pushButton_save.setDisabled(1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
