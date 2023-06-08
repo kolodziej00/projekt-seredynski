@@ -1,8 +1,9 @@
 import asyncio
 import time
-from PySide6.QtCore import QRunnable
+from PySide6.QtCore import QRunnable, QMutex
 
 class Animation(QRunnable):
+
       def __init__(self, MainWindow, iter, numOfIters, sleepTime):
          super().__init__()
          self.mainWindow = MainWindow
@@ -16,6 +17,8 @@ class Animation(QRunnable):
              self.extendedSleepTime = 0.4
          self.isPaused = False
          self.isRunning = True
+         self.mutex = QMutex()
+
 
       def run(self):
          print("Running a new thread")
@@ -23,7 +26,9 @@ class Animation(QRunnable):
             if self.isPaused == True:
                 time.sleep(0.1)
                 continue
+            self.mutex.lock()
             self.mainWindow.start_animation()
+            self.mutex.unlock()
             self.iter += 1
             time.sleep(self.sleepTime)
          self.mainWindow.enableStartButton()

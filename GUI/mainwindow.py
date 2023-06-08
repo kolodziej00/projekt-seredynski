@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
     def saveImage(self):
         pixmap = QPixmap(self.ui.graphicsView_CA.size())
         self.ui.graphicsView_CA.render(pixmap)
-        fileName = "Images//image" + str(self.ui.lcdNumber_iters.value()) + ".png"
+        fileName = "Images//image" + str(self.ui.lcdNumber_iters.value()) + str(self.visualization_mode) + ".png"
         pixmap.save(fileName, "PNG", -1)
 
     def changeCellsColor(self, selected, R, G, B, opacity=255):
@@ -84,13 +84,15 @@ class MainWindow(QMainWindow):
             seed = self.seed.customSeed
         else:
             seed = None
+        f = open("outputs.txt", "w")
         self.automata = CA(rows, cols, self.data.canvas.p_init_C, self.data.strategies.all_C,
                            self.data.strategies.all_D, self.data.strategies.k_D, self.data.strategies.k_C,
                            self.data.strategies.k_var_min, self.data.strategies.k_var_max, self.data.iterations.num_of_iter,
                            self.data.payoff.d, self.data.payoff.c, self.data.payoff.b, self.data.payoff.a, self.canvas.isSharing,
                            self.data.synch.synch_prob, self.data.competition.isTournament, self.data.mutations.p_state_mut,
                            self.data.mutations.p_strat_mut, self.data.mutations.p_0_neighb_mut, self.data.mutations.p_1_neighb_mut,
-                           self.data.debugger.isDebug,
+                           self.data.debugger.isDebug, self.data.debugger.is_test1, self.data.debugger.is_test2, f,
+                           self.data.synch.optimal_num_1s,
                            seed)
 
         k, cells = self.automata.cells[0]
@@ -338,9 +340,11 @@ class MainWindow(QMainWindow):
         self.competition = Competition(self.ui.radioButton_roulette.isChecked(),
                                         self.ui.radioButton_tournament.isChecked())
         
-        self.debugger = Debugger(self.ui.groupBox_debug.isChecked(),
+        self.debugger = Debugger(self.ui.radioButton_debug.isChecked(),
                                     self.ui.radioButton_CA_state.isChecked(), 
-                                    self.ui.radioButton_CA_strat.isChecked())
+                                    self.ui.radioButton_CA_strat.isChecked(),
+                                 self.ui.radioButton_test1.isChecked(), self.ui.radioButton_test2.isChecked(),
+                                 self.ui.radioButton_test3.isChecked())
         
         self.iterations = Iterations(self.ui.spinBox_num_of_iter.value(),
                                         self.ui.spinBox_num_of_exper.value())

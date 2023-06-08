@@ -437,6 +437,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.radioButton_custom.toggled.connect(self.spinBox_custom_seed.setEnabled)
         self.radioButton_debug.toggled.connect(self.groupBox_debug.setEnabled)
+        self.radioButton_debug.toggled.connect(self.radioButton_debug.setChecked)
         self.radioButton_debug.toggled.connect(self.radioButton_CA_state.setChecked)
         self.radioButton_debug.toggled.connect(self.radioButton_CA_strat.setChecked)
         self.radioButton_CA_state.setEnabled(False)

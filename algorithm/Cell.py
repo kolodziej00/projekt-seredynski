@@ -38,6 +38,9 @@ class Cell(QTableWidgetItem):
         self.group_of_1s = group_of_1s
         self.group_of_0s = group_of_0s
         self.change_strategy = change_strategy
+        self.pay_to_send = 0
+        self.pay_to_receive = 0
+        self.winner_agent = -1
 
         # cell's payoff in game with each neighbour [0] - north neighbour, [1] - north-west, [2] - west, [3] - south-west,
         # [4] - south, [5] - south-east, [6] - east, [7] - north
@@ -48,8 +51,10 @@ class Cell(QTableWidgetItem):
 
 
     def __deepcopy__(self, memodict={}):
-        return Cell(self.id, self.x, self.y, self.strategy, self.k, self.action, self.state, self.group_of_1s, self.group_of_0s,
+        cell = Cell(self.id, self.x, self.y, self.strategy, self.k, self.action, self.state, self.group_of_1s, self.group_of_0s,
                     self.change_strategy)
+        cell.avg_payoff = self.avg_payoff
+        return cell
 
     def __init_subclass__(cls) -> None:
         return super().__init_subclass__()
