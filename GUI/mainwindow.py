@@ -384,6 +384,9 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_kDC.setDisabled(0)
         self.ui.pushButton_actions.setDisabled(0)
         self.ui.pushButton_states.setDisabled(0)
+        self.ui.pushButton_start_anim.setDisabled(0)
+        self.ui.pushButton_save.setDisabled(0)
+        self.ui.pushButton_stop.setDisabled(0)
 
         self.save_results()
 
